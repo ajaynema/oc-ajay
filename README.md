@@ -1,6 +1,6 @@
 # oc-nlp-ajay - Fun and Learn series - NLP Interface to networking device using YANG.
 
-Project to play with AI/ML, openconfig and yang and learn the python and yang.
+Project to play with AI/ML, openconfig and yang and learn the python, yang and AI/ML.
 Same time trying to make tool useful for automation and telecom and networking programmers. 
 
 Fun:
