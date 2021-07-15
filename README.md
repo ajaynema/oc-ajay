@@ -3,6 +3,21 @@
 Project to play with openconfig and yang and learn the python and yang.
 Same time trying to make tool useful for automation and telecom and networking programmers. 
 
+Fun:
+
+1.  Understand the open config yang file - Done
+2.  Generate the python classes - Done
+3.  Use the python classes to generate the payload - Done
+4.  Load the classes from json payload - Done
+5.  Run Simulator
+6.  set and get from simulator using netconf client
+7.  set and get from simulator using  gRPC
+8.  Notification from simulator
+9.  Performance data from simulator
+10. Dynamic UI from Yang Files
+11. Data Storage for data
+12. Device management - "Low-Code"
+
 
 # Commands
 export PYBINDPLUGIN=`/usr/bin/env python -c 'import pyangbind; import os; print("%s/plugin" % os.path.dirname(pyangbind.__file__))'`
