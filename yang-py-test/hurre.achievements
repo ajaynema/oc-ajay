@@ -1,3 +1,7 @@
 15-july-2021
-* generate python classes from the open-config data model
-* test local-config 
+Python class generation
+    * local-rounting
+    * interfaces
+Test for payload generation
+    * local-rounting
+    * interfaces
