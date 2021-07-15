@@ -16,13 +16,14 @@ print(pybindJSON.dumps(oci))
 eth0 = oci.interfaces.interface["eth0"]
 
 eth0.config.description = "Linux eth0 interface"
-eth0.config.enabled = True
+eth0.config.enabled = "True"
 eth0.ethernet.config.duplex_mode = "FULL"
-eth0.ethernet.config.auto_negotiate = True
+eth0.ethernet.config.auto_negotiate = "True"
 
 eth0.subinterfaces.subinterface.add(0)
 subint0 = eth0.subinterfaces.subinterface[0]
 subint0.config.description = "Primary public IP address"
+subint0.config.enabled = "True"
 #subint0.ipv4.address.add("192.0.2.1")
 #subint0.ipv4.address["192.0.2.1"].config.prefix_length = 24
 
