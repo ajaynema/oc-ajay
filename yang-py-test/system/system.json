@@ -1,0 +1,8 @@
+{
+    "system": {
+        "config": {
+            "hostname": "test",
+            "domain-name": "test"
+        }
+    }
+}

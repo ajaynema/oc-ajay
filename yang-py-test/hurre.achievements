@@ -8,3 +8,4 @@ Test for payload generation
     * system
 Test for loading the payload from json file and build the python object
     * ntp
+    * hostname
