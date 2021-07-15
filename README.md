@@ -1,4 +1,4 @@
-# oc-ajay - NLP Interface to networking device using YANG.
+# oc-nlp-ajay - NLP Interface to networking device using YANG.
 
 Project to play with AI/ML, openconfig and yang and learn the python and yang.
 Same time trying to make tool useful for automation and telecom and networking programmers. 
