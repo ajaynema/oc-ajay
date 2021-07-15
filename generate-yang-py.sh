@@ -4,7 +4,7 @@ cd yang-py
 YANGDIR=../yang
 echo "generating acl..."
 pyang --plugindir $PYBINDPLUGIN -f  pybind --split-class-dir .  -p $YANGDIR/models $YANGDIR/models/acl/*.yang
-echo "generating bgp..."
+echo "generating aft..."
 pyang --plugindir $PYBINDPLUGIN -f  pybind --split-class-dir .  -p $YANGDIR/models $YANGDIR/models/aft/*.yang
 echo "generating bfd..."
 pyang --plugindir $PYBINDPLUGIN -f  pybind --split-class-dir .  -p $YANGDIR/models $YANGDIR/models/bfd/*.yang
@@ -72,6 +72,7 @@ echo "generating vlan..."
 pyang --plugindir $PYBINDPLUGIN -f  pybind --split-class-dir .  -p $YANGDIR/models $YANGDIR/models/vlan/*.yang
 echo "generating wifi..."
 pyang --plugindir $PYBINDPLUGIN -f  pybind --split-class-dir .  -p $YANGDIR/models $YANGDIR/models/wifi/*.yang
+echo "successfully generated python classes for yang files ..."
 
 
 #pyang --plugindir $PYBINDPLUGIN -f pybind --split-class-dir -o bgp.py ../../yang/models/bgp/openconfig-bgp.yang ../../yang/models/rib/openconfig-rib-bgp.yang ../../yang/models/bgp/openconfig-bgp-common-multiprotocol.yang ../../yang/models/bgp/openconfig-bgp-types.yang ../../yang/models/openconfig-extensions.yang ../../yang/models/types/openconfig-inet-types.yang ../../yang/models/types/openconfig-yang-types.yang ../../yang/models/types/openconfig-types.yang
