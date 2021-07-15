@@ -1,6 +1,6 @@
-# oc-ajay
+# oc-ajay - NLP Interface to networking device using YANG.
 
-Project to play with openconfig and yang and learn the python and yang.
+Project to play with AI/ML, openconfig and yang and learn the python and yang.
 Same time trying to make tool useful for automation and telecom and networking programmers. 
 
 Fun:
@@ -17,6 +17,8 @@ Fun:
 10. Dynamic UI from Yang Files
 11. Data Storage for data
 12. Device management - "Low-Code"
+13. NLP Interface to YANG Interface
+
 
 
 # Commands
