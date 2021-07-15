@@ -1,7 +1,7 @@
 # oc-ajay
 
 Project to play with openconfig and yang and learn the python and yang.
-Same time trying to make tool useful for automation and telecom and networking lovers. 
+Same time trying to make tool useful for automation and telecom and networking programmers. 
 
 
 # Commands
