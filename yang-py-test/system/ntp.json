@@ -1,0 +1,16 @@
+{
+    "system": {
+        "ntp": {
+            "servers": {
+                "server": {
+                    "0": {
+                        "address": "0",
+                        "config": {
+                            "address": "1.1.1.1"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

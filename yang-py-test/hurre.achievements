@@ -6,3 +6,5 @@ Test for payload generation
     * local-rounting
     * interfaces
     * system
+Test for loading the payload from json file and build the python object
+    * ntp
