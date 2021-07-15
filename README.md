@@ -7,3 +7,8 @@ export PYBINDPLUGIN=`/usr/bin/env python -c 'import pyangbind; import os; print(
 # packages
 pip install pyyang
 pip install pyyangbind
+
+#references
+https://rob.sh/post/209/
+http://yang.ciscolive.com/pod0/labs/lab9/lab9-m6
+https://developer.cisco.com/docs/openconfig-yang-release-9-2x/#oc-acl/querying-an-ipv4-acl-policy1
