@@ -6,11 +6,9 @@ YANG_PY_DIR = "../../yang-py"
 sys.path.append(YANG_PY_DIR)
 sys.path.append(".")
 
-from bgp import openconfig_bgp
+from system import openconfig_system
 import pyangbind.lib.pybindJSON as pybindJSON
-
-bgp = openconfig_bgp()
-#gp.global_.config.as_ = 2856
-#bgp.global_.config.router_id = "1.1.1.1"
-
-print(pybindJSON.dumps(bgp.obj))
+ocs = openconfig_system()
+ocs.system.config.hostname = "test"
+ocs.system.config.domain_name = "test"
+print(pybindJSON.dumps(ocs))
