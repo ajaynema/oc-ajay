@@ -24,7 +24,9 @@ Same time trying to make useful **tools** and **framework for automation and mon
 11. Data Storage for device configuration
 12. Device management - "Low-Code"
 13. NLP Interface to YANG Interface
-14. Docker image for easy to deploy and use.
+14. Templete based configuration
+15. TMF interface for open config
+16. Docker image for easy to deploy and use.
 
 
 # Packages
