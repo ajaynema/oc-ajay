@@ -1,4 +1,4 @@
-# Fun and Learn Series with Ajay
+# Fun and Learn Tech Series with Ajay
 
 # oc-nlp-ajay - Open config UI and NLP Interface for automation and monitoring for networking device using YANG.
 
