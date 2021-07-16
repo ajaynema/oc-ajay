@@ -7,10 +7,10 @@ Same time trying to make tool useful for automation and telecom and networking p
 
 Fun:
 
-1.  Understand the open config yang file - Done
-2.  Generate the python classes - Done
-3.  Use the python classes to generate the payload - Done
-4.  Load the classes from json payload - Done
+**1.  Understand the open config yang file - Done**
+**2.  Generate the python classes - Done**
+**3.  Use the python classes to generate the payload - Done**
+**4.  Load the classes from json payload - Done**
 5.  Run Simulator
 6.  set and get from simulator using netconf client
 7.  set and get from simulator using  gRPC
