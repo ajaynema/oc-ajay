@@ -2,7 +2,7 @@
 
 # oc-nlp-ajay - Open config UI and NLP Interface for automation and monitoring for networking device using YANG.
 
-Project to play with **AI/ML**, **Open config** and **YANG** and learn the python, yang and AI/ML.
+Project to play with **AI/ML**, **Open config** and **YANG** and learn the python, YANG, gRPC, gNMI, NETCONF and AI/ML.
 Same time trying to make useful tools and **framework for automation and monitoring** for **networking devices** for telecom and **networking programmers**. 
 
 Fun:
