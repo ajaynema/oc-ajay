@@ -35,7 +35,7 @@ export PYBINDPLUGIN=`/usr/bin/env python -c 'import pyangbind; import os; print(
 pip install pyyang
 pip install pyyangbind
 
-# Peferences
+# References and URLs 
 
 https://rob.sh/post/209/
 http://yang.ciscolive.com/pod0/labs/lab9/lab9-m6
