@@ -1,1 +1,1 @@
-java -jar -Dorg.apache.sshd.registerBouncyCastle=false netconf-testtool-1.7.2-executable.jar --debug true 
+java -jar -Dorg.apache.sshd.registerBouncyCastle=false netconf-testtool-1.7.2-executable.jar --debug true --schemas-dir schema
