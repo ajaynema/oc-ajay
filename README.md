@@ -16,7 +16,9 @@ Same time trying to make useful **tools** and **framework for automation and mon
 **=>  Load the classes from json payload - Done**
 
 **=>  Run Simulator - Done **
+
 **=>  Python base netconf client (connect and get capabilites) - Done **
+
 =>  set and get from simulator using netconf client
 =>  set and get from simulator using  gRPC
 =>  Notification from simulator
