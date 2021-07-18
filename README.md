@@ -7,6 +7,8 @@ Same time trying to make useful **tools** and **framework for automation and mon
 
 # Fun activities:
 
+#    DONE:
+
 **=>  Understand the open config yang file - Done**
 
 **=>  Generate the python classes - Done**
@@ -17,7 +19,11 @@ Same time trying to make useful **tools** and **framework for automation and mon
 
 **=>  Run Simulator - Done**
 
-**=>  Python base netconf client (connect and get capabilites) - Done**
+**=>  netconf client (connect and get capabilites) - Done**
+
+**=>  netconf client (connect and get schemas) - Done**
+
+#    Pending:
 
 =>  set and get from simulator using netconf client
 
