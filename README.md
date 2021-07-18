@@ -1,25 +1,40 @@
-# oc-ajay - NLP Interface to networking device using YANG.
+# Fun and Learn Tech Series with Ajay
 
-Project to play with AI/ML, openconfig and yang and learn the python and yang.
-Same time trying to make tool useful for automation and telecom and networking programmers. 
+# oc-nlp-ajay - Open config UI and NLP Interface and integration with TMF Bussiness model for automation and monitoring for networking device using YANG.
 
-Fun:
+Project is tech fun and learn series by Ajay to learn the **python**, **YANG**, **gRPC**, **gNMI**, **NETCONF**, **TMF APIs** and **AI/ML**. 
+Same time trying to make useful **tools** and **framework for automation and monitoring** for **networking devices** for **telecom** and **networking programmers**. 
 
-1.  Understand the open config yang file - Done
-2.  Generate the python classes - Done
-3.  Use the python classes to generate the payload - Done
-4.  Load the classes from json payload - Done
+# Fun activities:
+
+**1.  Understand the open config yang file - Done**
+
+**2.  Generate the python classes - Done**
+
+**3.  Use the python classes to generate the payload - Done**
+
+**4.  Load the classes from json payload - Done**
+
 5.  Run Simulator
 6.  set and get from simulator using netconf client
 7.  set and get from simulator using  gRPC
 8.  Notification from simulator
 9.  Performance data from simulator
 10. Dynamic UI from Yang Files
-11. Data Storage for data
+11. Data Storage for device configuration
 12. Device management - "Low-Code"
 13. NLP Interface to YANG Interface
+14. Templete based configuration
+15. TMF interface for open config
+16. BPMN workflow engine for automation
+17. Docker image for easy to deploy and use.
 
 
+# Packages
+
+pip install pyyang
+
+pip install pyyangbind
 
 # Commands
 export PYBINDPLUGIN=`/usr/bin/env python -c 'import pyangbind; import os; print("%s/plugin" % os.path.dirname(pyangbind.__file__))'`
@@ -31,7 +46,7 @@ pip install pyyangbind
 pip install ncclient
 pip install -U paramiko 
 
-# Peferences
+# References and URLs 
 
 https://rob.sh/post/209/
 http://yang.ciscolive.com/pod0/labs/lab9/lab9-m6
