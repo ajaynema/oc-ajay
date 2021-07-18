@@ -51,20 +51,13 @@ Same time trying to make useful **tools** and **framework for automation and mon
 
 
 # Packages
-
-pip install pyyang
-
-pip install pyyangbind
-
-# Commands
-export PYBINDPLUGIN=`/usr/bin/env python -c 'import pyangbind; import os; print("%s/plugin" % os.path.dirname(pyangbind.__file__))'`
-
-
-# Packages
 pip install pyyang
 pip install pyyangbind
 pip install ncclient
 pip install -U paramiko 
+
+# Commands
+export PYBINDPLUGIN=`/usr/bin/env python -c 'import pyangbind; import os; print("%s/plugin" % os.path.dirname(pyangbind.__file__))'`
 
 # References and URLs 
 
