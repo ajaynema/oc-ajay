@@ -28,6 +28,8 @@ export PYBINDPLUGIN=`/usr/bin/env python -c 'import pyangbind; import os; print(
 # Packages
 pip install pyyang
 pip install pyyangbind
+pip install ncclient
+pip install -U paramiko 
 
 # Peferences
 
@@ -39,3 +41,4 @@ https://www.ciscolive.com/c/dam/r/ciscolive/us/docs/2017/pdf/DEVNET-1775.pdf
 http://ydk.cisco.com/py/docs/gen_doc_ab7a308aaa0f3c83ee97d51af7c340f088f28655.html
 https://pc.nanog.org/static/published/meetings/NANOG71/1456/20171003_Alvarez_Getting_Started_With_v1.pdf
 https://github.com/openconfig/public/blob/master/release/models/system/openconfig-system.yang
+https://docs.opendaylight.org/projects/netconf/en/latest/testtool.html#verifying-testtool
