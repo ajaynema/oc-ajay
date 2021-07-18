@@ -7,27 +7,28 @@ Same time trying to make useful **tools** and **framework for automation and mon
 
 # Fun activities:
 
-**1.  Understand the open config yang file - Done**
+**=>  Understand the open config yang file - Done**
 
-**2.  Generate the python classes - Done**
+**=>  Generate the python classes - Done**
 
-**3.  Use the python classes to generate the payload - Done**
+**=>  Use the python classes to generate the payload - Done**
 
-**4.  Load the classes from json payload - Done**
+**=>  Load the classes from json payload - Done**
 
-5.  Run Simulator
-6.  set and get from simulator using netconf client
-7.  set and get from simulator using  gRPC
-8.  Notification from simulator
-9.  Performance data from simulator
-10. Dynamic UI from Yang Files
-11. Data Storage for device configuration
-12. Device management - "Low-Code"
-13. NLP Interface to YANG Interface
-14. Templete based configuration
-15. TMF interface for open config
-16. BPMN workflow engine for automation
-17. Docker image for easy to deploy and use.
+**=>  Run Simulator - Done **
+**=>  Python base netconf client (connect and get capabilites) - Done **
+=>  set and get from simulator using netconf client
+=>  set and get from simulator using  gRPC
+=>  Notification from simulator
+=>  Performance data from simulator
+=> Dynamic UI from Yang Files
+=> Data Storage for device configuration
+=> Device management - "Low-Code"
+=> NLP Interface to YANG Interface
+=> Templete based configuration
+=> TMF interface for open config
+=> BPMN workflow engine for automation
+=> Docker image for easy to deploy and use.
 
 
 # Packages
