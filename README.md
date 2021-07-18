@@ -20,16 +20,27 @@ Same time trying to make useful **tools** and **framework for automation and mon
 **=>  Python base netconf client (connect and get capabilites) - Done**
 
 =>  set and get from simulator using netconf client
+
 =>  set and get from simulator using  gRPC
+
 =>  Notification from simulator
+
 =>  Performance data from simulator
+
 => Dynamic UI from Yang Files
+
 => Data Storage for device configuration
+
 => Device management - "Low-Code"
+
 => NLP Interface to YANG Interface
+
 => Templete based configuration
+
 => TMF interface for open config
+
 => BPMN workflow engine for automation
+
 => Docker image for easy to deploy and use.
 
 
