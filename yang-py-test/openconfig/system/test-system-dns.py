@@ -2,7 +2,7 @@ from __future__ import print_function, unicode_literals
 
 import os
 import sys, os.path
-YANG_PY_DIR = "../../yang-py"
+YANG_PY_DIR = "../../../yang-py/openconfig"
 sys.path.append(YANG_PY_DIR)
 sys.path.append(".")
 
