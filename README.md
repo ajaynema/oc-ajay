@@ -51,9 +51,13 @@ Same time trying to make useful **tools** and **framework for automation and mon
 
 
 # Packages
+
 pip install pyyang
+
 pip install pyyangbind
+
 pip install ncclient
+
 pip install -U paramiko 
 
 # Commands
