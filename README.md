@@ -77,3 +77,4 @@ https://docs.opendaylight.org/projects/netconf/en/latest/testtool.html#verifying
 https://github.com/CiscoDevNet/ncc
 https://pubhub.devnetcloud.com/media/yang-connector/docs/README.html
 https://pypi.org/project/pyats/
+https://www.ciscolive.com/c/dam/r/ciscolive/emea/docs/2019/pdf/BRKDEV-1368.pdf
