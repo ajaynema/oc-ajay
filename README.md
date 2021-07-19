@@ -1,13 +1,13 @@
 # Fun and Learn Tech Series with Ajay
 
-# oc-nlp-ajay - Open config UI and NLP Interface and integration with TMF Bussiness model for automation and monitoring for networking device using YANG.
+## oc-nlp-ajay - Open config UI and NLP Interface and integration with TMF Bussiness model for automation and monitoring for networking device using YANG.
 
 Project is tech fun and learn series by Ajay to learn the **python**, **YANG**, **gRPC**, **gNMI**, **NETCONF**, **TMF APIs** and **AI/ML**. 
 Same time trying to make useful **tools** and **framework for automation and monitoring** for **networking devices** for **telecom** and **networking programmers**. 
 
-# Fun activities:
+### Fun activities:
 
-#    DONE:
+####    DONE:
 
 **=>  Understand the open config yang file - Done**
 
@@ -23,7 +23,7 @@ Same time trying to make useful **tools** and **framework for automation and mon
 
 **=>  netconf client (connect and get schemas) - Done**
 
-#    Pending:
+####    Pending:
 
 =>  set and get from simulator using netconf client
 
