@@ -5,3 +5,5 @@ m = manager.connect(host='localhost', port='17830', username='admin',
 print(m.connected)
 schema = m.get_schema('test',"2014-10-17")
 print(schema)
+schema = m.get_schema('hostname',"2017-03-31")
+print(schema)
