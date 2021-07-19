@@ -4,8 +4,8 @@ m = manager.connect(host='localhost', port='17830', username='admin',
                     password='netconf', device_params={'name':'iosxe'}, hostkey_verify=False)
 
 print(m.connected)
-rpc = '''<config>
-            <hostname>
+rpc = '''<config xmlns:xc="urn:ietf:params:xml:ns:netconf:base:1.0">
+            <hostname xmlns="urn:opendaylight:hostname">
                 <system>
                     <hostname>
                         test
