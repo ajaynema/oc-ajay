@@ -1,0 +1,32 @@
+module ietf-interfaces {
+    yang-version 1;
+
+    namespace
+      "urn:ietf:params:xml:ns:yang:ietf-interfaces";
+
+    prefix ncm;
+
+    import ietf-yang-types {
+      prefix yang;
+      revision-date "2013-07-15";
+    }
+
+    import ietf-inet-types {
+      prefix inet;
+      revision-date "2013-07-15";
+    }
+
+    revision "2017-03-31";
+    container interfaces {
+        list interface {
+            key "name";
+            leaf name {
+                type string;
+            }
+            leaf enabled {
+                type boolean;
+                default "true";
+            }
+        }
+    }
+}
