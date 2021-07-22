@@ -1,1 +1,0 @@
-class pip install pymongo
