@@ -16,24 +16,24 @@
  => Alarm APIs End points
 
         Single Alarm Operation
-        - Create Alarm - "/api/alarm",methods='POST'
-        - Modify Alarm - "/api/alarm/<alarmId>",methods='PATCH'
-        - Delete Alarm - "/api/alarm/<alarmId>/clear", methods='POST'
-        - Delete Alarm - "/api/alarm/<alarmId>/delete", methods='POST'
-        - Delete Alarm - "/api/alarm/<alarmId>", methods='DELETE'
-        - Get Alarm - "/api/alarm/<alarmId>",methods='GET'
+        - Create Alarm - "/api/v1/alarm",methods='POST'
+        - Modify Alarm - "/api/v1/alarm/<alarmId>",methods='PATCH'
+        - Delete Alarm - "/api/v1/alarm/<alarmId>/clear", methods='POST'
+        - Delete Alarm - "/api/v1/alarm/<alarmId>/delete", methods='POST'
+        - Delete Alarm - "/api/v1/alarm/<alarmId>", methods='DELETE'
+        - Get Alarm - "/api/v1/alarm/<alarmId>",methods='GET'
 
         Multiple Alarms Operations
-        - Get Alarms - "/api/alarms",methods='GET'
-        - Ack Alarms - "/api/ackAlarms",methods='POST'
-        - Un Ack Alarms - "/api/unAckAlarms", methods='POST'
-        - Clear Alarms - "/api/clearAlarms", methods='POST'
-        - Comment Alarm - "/api/commentsAlarms"methods='POST'
-        - Group Alarm - "/api/groupAlarms",methods='POST'
-        - Un Group Alarm - "/api/ungroupAlarms",methods='POST'
+        - Get Alarms - "/api/v1/alarms",methods='GET'
+        - Ack Alarms - "/api/v1/ackAlarms",methods='POST'
+        - Un Ack Alarms - "/api/v1/unAckAlarms", methods='POST'
+        - Clear Alarms - "/api/v1/clearAlarms", methods='POST'
+        - Comment Alarm - "/api/v1/commentsAlarms"methods='POST'
+        - Group Alarm - "/api/v1/groupAlarms",methods='POST'
+        - Un Group Alarm - "/api/v1/ungroupAlarms",methods='POST'
         Pub/Sub
-        - Subscribe for Alarm -  "/api/hub" , methods='POST'
-        - unsubscribe for Alarm -  "/api/hub/<id>" , methods='DELETE'
+        - Subscribe for Alarm -  "/api/v1/hub" , methods='POST'
+        - unsubscribe for Alarm -  "/api/v1/hub/<id>" , methods='DELETE'
         - Publish the life cycle event to subscribed systems - <remote url>, method='POST'
         
 => Use cases
