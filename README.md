@@ -60,6 +60,10 @@ pip install ncclient
 
 pip install -U paramiko 
 
+pip install flask
+
+pip install jsonpickle
+
 ## Commands
 export PYBINDPLUGIN=`/usr/bin/env python -c 'import pyangbind; import os; print("%s/plugin" % os.path.dirname(pyangbind.__file__))'`
 
