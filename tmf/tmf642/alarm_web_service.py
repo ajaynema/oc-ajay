@@ -20,7 +20,6 @@ class AlarmWebService:
         self.api.add_url_rule("/api/<version>/commentsAlarms","comment_alarms",self.comment_alarms,methods=['POST'])
         self.api.add_url_rule("/api/<version>/groupAlarms","group_alarms",self.group_alarms,methods=['POST'])
         self.api.add_url_rule("/api/<version>/ungroupAlarms","ungroup_alarms",self.ungroup_alarms,methods=['POST'])
-        #Subscribe PUB/SUB
         self.api.add_url_rule("/api/<version>/hub","subscribe",self.subscribe,methods=['POST'])
         self.api.add_url_rule("/api/<version>/hub/<id>","hub",self.unsubscribe,methods=['DELETE'])
         self.port = port
