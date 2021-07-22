@@ -42,7 +42,9 @@
         - Publish the life cycle event to subscribed systems - <remote url>, method='POST'
         
 => Use cases
+
     1. Alarm Owning System -> Notified System
+    
     2. Alarm Source System -> Alarm Owning System 
 
      
