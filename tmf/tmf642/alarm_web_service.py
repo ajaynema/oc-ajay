@@ -5,7 +5,17 @@ sys.path.append("./../../db")
 from flask import Flask,Response,request
 import jsonpickle
 from db_manager import DbManager
+
 BASE_URL="/tmf-api/alarmManagement/<version>"
+DB_ALARM="DB_ALARM"
+TABLE_ALARM="alarm"
+TABLE_ACK_ALARM="ack_alarm"
+TABLE_UNACK_ALARM="unack_alarm"
+TABLE_CLEAR_ALARM="clear_alarm"
+TABLE_COMMENT_ALARM="comment_alarm"
+TABLE_ALARM_SUBSCRIPTION="alarm_subscription"
+
+
 class AlarmWebService:
     def __init__(self,name="AlarmWebService",port=80):
         self.name = name
@@ -19,9 +29,17 @@ class AlarmWebService:
         self.api.add_url_rule(BASE_URL+"/alarms","get_alarms",self.get_alarms,methods=['GET'])
         self.api.add_url_rule(BASE_URL+"/alarm","get_alarms",self.get_alarms,methods=['GET'])
         self.api.add_url_rule(BASE_URL+"/ackAlarms","ack_alarms",self.ack_alarms,methods=['POST'])
+        self.api.add_url_rule(BASE_URL+"/ackAlarms","get_ack_alarms",self.get_ack_alarms,methods=['GET'])
+        self.api.add_url_rule(BASE_URL+"/ackAlarms/<id>","get_ack_alarm",self.get_ack_alarm,methods=['GET'])
         self.api.add_url_rule(BASE_URL+"/unAckAlarms","unack_alarms",self.unack_alarms,methods=['POST'])
+        self.api.add_url_rule(BASE_URL+"/unAckAlarms","get_unack_alarms",self.get_unack_alarms,methods=['GET'])
+        self.api.add_url_rule(BASE_URL+"/unAckAlarms/<id>","get_unack_alarm",self.get_unack_alarm,methods=['GET'])
         self.api.add_url_rule(BASE_URL+"/clearAlarms","clear_alarms",self.clear_alarms,methods=['POST'])
-        self.api.add_url_rule(BASE_URL+"/commentsAlarms","comment_alarms",self.comment_alarms,methods=['POST'])
+        self.api.add_url_rule(BASE_URL+"/clearAlarms","get_clear_alarms",self.get_clear_alarms,methods=['GET'])
+        self.api.add_url_rule(BASE_URL+"/clearAlarms/<id>","get_clear_alarm",self.get_clear_alarm,methods=['GET'])
+        self.api.add_url_rule(BASE_URL+"/commentAlarms","comment_alarms",self.comment_alarms,methods=['POST'])
+        self.api.add_url_rule(BASE_URL+"/commentAlarms","get_comment_alarms",self.get_comment_alarms,methods=['GET'])
+        self.api.add_url_rule(BASE_URL+"/commentAlarms/<id>","get_comment_alarm",self.get_comment_alarm,methods=['GET'])
         self.api.add_url_rule(BASE_URL+"/groupAlarms","group_alarms",self.group_alarms,methods=['POST'])
         self.api.add_url_rule(BASE_URL+"/ungroupAlarms","ungroup_alarms",self.ungroup_alarms,methods=['POST'])
         self.api.add_url_rule(BASE_URL+"/hub","subscribe",self.subscribe,methods=['POST'])
@@ -42,7 +60,7 @@ class AlarmWebService:
             return Response("", 409 ,mimetype='application/json')
         if ("alarmRaisedTime" not in data):
             return Response("", 409 ,mimetype='application/json')
-        row = DbManager.insert("DB_ALARM","alarm",data)
+        row = DbManager.insert(DB_ALARM,TABLE_ALARM,data)
         response_str = jsonpickle.encode(row)
         return Response(response_str, 200, mimetype='application/json')
 
@@ -51,35 +69,230 @@ class AlarmWebService:
  
     def delete_alarm(self,version,alarmId):
         query = {"id" : alarmId}
-        row = DbManager.query("DB_ALARM","alarm",query)
+        row = DbManager.query(DB_ALARM,TABLE_ALARM,query)
         if (row is None):
             return Response("", 404 ,mimetype='application/json')
-        DbManager.delete("DB_ALARM","alarm",alarmId)
+        DbManager.delete(DB_ALARM,TABLE_ALARM,alarmId)
         return Response("", 204, mimetype='application/json')
     
     def get_alarm(self,version,alarmId):
         query = {"id" : alarmId}
-        row = DbManager.query("DB_ALARM","alarm",query)
+        row = DbManager.query(DB_ALARM,TABLE_ALARM,query)
         response_str = jsonpickle.encode(row)
         return Response(response_str, 200, mimetype='application/json')
 
     def get_alarms(self,version):
-        row = DbManager.get_all("DB_ALARM","alarm")
+        row = DbManager.get_all(DB_ALARM,TABLE_ALARM)
+        response_str = jsonpickle.encode(row)
+        return Response(response_str, 200, mimetype='application/json')
+    
+    def get_ack_alarm(self,version,id):
+        query = {"id" : id}
+        row = DbManager.query(DB_ALARM,TABLE_ACK_ALARM,query)
+        response_str = jsonpickle.encode(row)
+        return Response(response_str, 200, mimetype='application/json')
+
+    def get_unack_alarms(self,version):
+        row = DbManager.get_all(DB_ALARM,TABLE_UNACK_ALARM)
         response_str = jsonpickle.encode(row)
         return Response(response_str, 200, mimetype='application/json')
    
-    def ack_alarms(self,version):
+    def get_unack_alarm(self,version,id):
+        query = {"id" : id}
+        row = DbManager.query(DB_ALARM,TABLE_CLEAR_ALARM,query)
+        response_str = jsonpickle.encode(row)
+        return Response(response_str, 200, mimetype='application/json')
+
+    def get_clear_alarms(self,version):
+        row = DbManager.get_all(DB_ALARM,TABLE_CLEAR_ALARM)
+        response_str = jsonpickle.encode(row)
+        return Response(response_str, 200, mimetype='application/json')
+   
+    def get_clear_alarm(self,version,id):
+        query = {"id" : id}
+        row = DbManager.query(DB_ALARM,TABLE_CLEAR_ALARM,query)
+        response_str = jsonpickle.encode(row)
+        return Response(response_str, 200, mimetype='application/json')
+
+    def get_comment_alarms(self,version):
+        row = DbManager.get_all(DB_ALARM,TABLE_COMMENT_ALARM)
+        response_str = jsonpickle.encode(row)
+        return Response(response_str, 200, mimetype='application/json')
+   
+    def get_comment_alarm(self,version,id):
+        query = {"id" : id}
+        row = DbManager.query(DB_ALARM,TABLE_COMMENT_ALARM,query)
+        response_str = jsonpickle.encode(row)
+        return Response(response_str, 200, mimetype='application/json')
+
+    def get_ack_alarms(self,version):
+        row = DbManager.get_all(DB_ALARM,TABLE_ACK_ALARM)
+        response_str = jsonpickle.encode(row)
+        return Response(response_str, 200, mimetype='application/json')
+    
+    def process_unack(self,ack_alarm):
+        alarmPattern = ack_alarm['alarmPattern']
+        query =  {"$or" : alarmPattern}
+        alarms = DbManager.query_many(DB_ALARM,TABLE_ALARM,query) 
+        ack_alarm['unackedAlarm'] = [] 
+        for row in alarms:
+             alarm = {}
+             alarm['id'] = row['id']
+             alarm['ackSystemId'] = ack_alarm['ackSystemId']
+             alarm['ackUserId'] = ack_alarm['ackUserId']
+             row['id'] = row['id']
+             row['ackSystemId'] = ack_alarm['ackSystemId']
+             row['ackUserId'] = ack_alarm['ackUserId']
+             if 'ackTime' in ack_alarm:
+                alarm['ackTime'] = ack_alarm['ackTime']
+                row['ackTime'] = ack_alarm['ackTime']
+                 
+             alarm['ackState'] = "UNacknowledged"
+             row['ackState'] = "UNacknowledged"
+             alarm = DbManager.update(DB_ALARM,TABLE_ALARM,row['id'],alarm)
+             ack_alarm['unackedAlarm'].append(row)
+        ack_alarm['state'] = 'done'  
+        DbManager.update(DB_ALARM,TABLE_UNACK_ALARM,ack_alarm['id'],ack_alarm)
+        return
+    
+    def process_ack(self,ack_alarm):
+        alarmPattern = ack_alarm['alarmPattern']
+        query =  {"$or" : alarmPattern}
+        alarms = DbManager.query_many(DB_ALARM,TABLE_ALARM,query) 
+        ack_alarm['ackedAlarm'] = [] 
+        for row in alarms:
+             alarm = {}
+             alarm['id'] = row['id']
+             alarm['ackSystemId'] = ack_alarm['ackSystemId']
+             alarm['ackUserId'] = ack_alarm['ackUserId']
+             row['id'] = row['id']
+             row['ackSystemId'] = ack_alarm['ackSystemId']
+             row['ackUserId'] = ack_alarm['ackUserId']
+             if 'ackTime' in ack_alarm:
+                alarm['ackTime'] = ack_alarm['ackTime']
+                row['ackTime'] = ack_alarm['ackTime']
+                 
+             alarm['ackState'] = "acknowledged"
+             row['ackState'] = "acknowledged"
+             DbManager.update(DB_ALARM,TABLE_ALARM,row['id'],alarm)
+             ack_alarm['ackedAlarm'].append(row)
+        ack_alarm['state'] = 'done'  
+        DbManager.update(DB_ALARM,TABLE_ACK_ALARM,ack_alarm['id'],ack_alarm)
         return
 
-    def unack_alarms(self,version):
+    def process_clear(self,clear_alarm):
+        alarmPattern = clear_alarm['alarmPattern']
+        query =  {"$or" : alarmPattern}
+        alarms = DbManager.query_many(DB_ALARM,TABLE_ALARM,query) 
+        clear_alarm['clearedAlarm'] = [] 
+        for row in alarms:
+             alarm = {}
+             alarm['id'] = row['id']
+             alarm['clearSystemId'] = clear_alarm['clearSystemId']
+             alarm['clearUserId'] = clear_alarm['clearUserId']
+             row['id'] = row['id']
+             row['clearSystemId'] = clear_alarm['clearSystemId']
+             row['clearUserId'] = clear_alarm['clearUserId']
+             if 'alarmClearedTime' in clear_alarm:
+                alarm['alarmClearedTime'] = clear_alarm['alarmClearedTime']
+                row['alarmClearedTime'] = clear_alarm['alarmClearedTime']
+                 
+             alarm['state'] = "cleared"
+             alarm['perceivedSeverity'] = "cleared"
+             
+             row['state'] = "cleared"
+             row['perceivedSeverity'] = "cleared"
+             DbManager.update(DB_ALARM,TABLE_ALARM,row['id'],alarm)
+             clear_alarm['clearedAlarm'].append(row)
+        clear_alarm['state'] = 'done'  
+        DbManager.update(DB_ALARM,TABLE_CLEAR_ALARM,clear_alarm['id'],clear_alarm)
         return
+
+    def process_comment(self,comment_alarm):
+        alarmPattern = comment_alarm['alarmPattern']
+        query =  {"$or" : alarmPattern}
+        alarms = DbManager.query_many(DB_ALARM,TABLE_ALARM,query) 
+        comment_alarm['commentedAlarm'] = [] 
+        for row in alarms:
+             if 'comment' not in row:
+                 row['comment'] = []
+             row['comment'].append(comment_alarm['comment'])
+             alarm = {}
+             alarm['id'] = row['id']
+             alarm['comment']=[]
+             for c in row['comment']:
+                alarm['comment'].append(c)
+             row['id'] = row['id'] 
+             DbManager.update(DB_ALARM,TABLE_ALARM,row['id'],alarm)
+             comment_alarm['commentedAlarm'].append(row)
+             print("\n\nalarm:")
+             print(alarm)
+        comment_alarm['state'] = 'done'  
+        DbManager.update(DB_ALARM,TABLE_COMMENT_ALARM,comment_alarm['id'],comment_alarm)
+        return
+    
+    def ack_alarms(self,version):
+        data = request.get_json()
+        if ("ackSystemId" not in data):
+            return Response("", 409 ,mimetype='application/json')
+        if ("ackUserId" not in data):
+            return Response("", 409 ,mimetype='application/json')
+        if ("alarmPattern" not in data):
+            return Response("", 409 ,mimetype='application/json')
+        data['state'] = "progress"
+        row = DbManager.insert(DB_ALARM,TABLE_ACK_ALARM,data)
+        self.process_ack(row)
+        response_str = jsonpickle.encode(row)
+        return Response(response_str, 200, mimetype='application/json')
+   
+    def unack_alarms(self,version):
+        data = request.get_json()
+        if ("ackSystemId" not in data):
+            return Response("", 409 ,mimetype='application/json')
+        if ("ackUserId" not in data):
+            return Response("", 409 ,mimetype='application/json')
+        if ("alarmPattern" not in data):
+            return Response("", 409 ,mimetype='application/json')
+        data['state'] = "progress"
+        row = DbManager.insert(DB_ALARM,TABLE_UNACK_ALARM,data)
+        self.process_unack(row)
+        response_str = jsonpickle.encode(row)
+        return Response(response_str, 200, mimetype='application/json')
 
     def comment_alarms(self,version):
-        return
+        data = request.get_json()
+        print(data)
+        if ("comment" not in data):
+            print(" missing comment")
+            return Response("", 409 ,mimetype='application/json')
+        if ("alarmPattern" not in data):
+            print(" missing alarmPattern")
+            return Response("", 409 ,mimetype='application/json')
+        data['state'] = "progress"
+        row = DbManager.insert(DB_ALARM,TABLE_COMMENT_ALARM,data)
+        self.process_comment(row)
+        response_str = jsonpickle.encode(row)
+        return Response(response_str, 200, mimetype='application/json')
 
     def clear_alarms(self,version):
-        return
+        data = request.get_json()
+        print(data)
+        if ("clearSystemId" not in data):
+            print(" missing clearSystemId")
+            return Response("", 409 ,mimetype='application/json')
+        if ("clearUserId" not in data):
+            print(" missing clearUserId")
+            return Response("", 409 ,mimetype='application/json')
+        if ("alarmPattern" not in data):
+            print(" missing alarmPattern")
+            return Response("", 409 ,mimetype='application/json')
+        data['state'] = "progress"
+        row = DbManager.insert(DB_ALARM,TABLE_CLEAR_ALARM,data)
+        self.process_clear(row)
+        response_str = jsonpickle.encode(row)
+        return Response(response_str, 200, mimetype='application/json')
 
+    
     def ungroup_alarms(self,version):
         return
     
@@ -90,10 +303,10 @@ class AlarmWebService:
         data = request.get_json()
         callback = data['callback']
         query = {"callback" : callback}
-        row = DbManager.query("DB_PROFILE","alarm_subscription",query)
+        row = DbManager.query(DB_ALARM,"alarm_subscription",query)
         if (row is not None):
             return Response("", 409 ,mimetype='application/json')
-        row = DbManager.insert("DB_PROFILE","alarm_subscription",data)
+        row = DbManager.insert(DB_ALARM,TABLE_ALARM_SUBSCRIPTION,data)
         result={}
         result['id'] = row['id']
         result['callback'] = row['callback']
@@ -103,10 +316,10 @@ class AlarmWebService:
 
     def unsubscribe(self,version,id):
         query = {"id" : id}
-        row = DbManager.query("DB_PROFILE","alarm_subscription",query)
+        row = DbManager.query(DB_ALARM,TABLE_ALARM_SUBSCRIPTION,query)
         if (row is None):
             return Response("", 404 ,mimetype='application/json')
-        DbManager.delete("DB_PROFILE","alarm_subscription",id)
+        DbManager.delete(DB_ALARM,"alarm_subscription",id)
         return Response("", 204, mimetype='application/json')
 
     def start(self):
