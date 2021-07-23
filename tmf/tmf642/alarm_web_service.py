@@ -13,6 +13,9 @@ TABLE_ACK_ALARM="ack_alarm"
 TABLE_UNACK_ALARM="unack_alarm"
 TABLE_CLEAR_ALARM="clear_alarm"
 TABLE_COMMENT_ALARM="comment_alarm"
+TABLE_GROUP_ALARM="group_alarm"
+TABLE_UNGROUP_ALARM="ungroup_alarm"
+
 TABLE_ALARM_SUBSCRIPTION="alarm_subscription"
 
 
@@ -28,20 +31,31 @@ class AlarmWebService:
         #Multiple Alarms Operations
         self.api.add_url_rule(BASE_URL+"/alarms","get_alarms",self.get_alarms,methods=['GET'])
         self.api.add_url_rule(BASE_URL+"/alarm","get_alarms",self.get_alarms,methods=['GET'])
+        
         self.api.add_url_rule(BASE_URL+"/ackAlarms","ack_alarms",self.ack_alarms,methods=['POST'])
         self.api.add_url_rule(BASE_URL+"/ackAlarms","get_ack_alarms",self.get_ack_alarms,methods=['GET'])
         self.api.add_url_rule(BASE_URL+"/ackAlarms/<id>","get_ack_alarm",self.get_ack_alarm,methods=['GET'])
+        
         self.api.add_url_rule(BASE_URL+"/unAckAlarms","unack_alarms",self.unack_alarms,methods=['POST'])
         self.api.add_url_rule(BASE_URL+"/unAckAlarms","get_unack_alarms",self.get_unack_alarms,methods=['GET'])
         self.api.add_url_rule(BASE_URL+"/unAckAlarms/<id>","get_unack_alarm",self.get_unack_alarm,methods=['GET'])
+        
         self.api.add_url_rule(BASE_URL+"/clearAlarms","clear_alarms",self.clear_alarms,methods=['POST'])
         self.api.add_url_rule(BASE_URL+"/clearAlarms","get_clear_alarms",self.get_clear_alarms,methods=['GET'])
         self.api.add_url_rule(BASE_URL+"/clearAlarms/<id>","get_clear_alarm",self.get_clear_alarm,methods=['GET'])
+        
         self.api.add_url_rule(BASE_URL+"/commentAlarms","comment_alarms",self.comment_alarms,methods=['POST'])
         self.api.add_url_rule(BASE_URL+"/commentAlarms","get_comment_alarms",self.get_comment_alarms,methods=['GET'])
         self.api.add_url_rule(BASE_URL+"/commentAlarms/<id>","get_comment_alarm",self.get_comment_alarm,methods=['GET'])
+        
         self.api.add_url_rule(BASE_URL+"/groupAlarms","group_alarms",self.group_alarms,methods=['POST'])
+        self.api.add_url_rule(BASE_URL+"/groupAlarms","get_group_alarms",self.get_group_alarms,methods=['GET'])
+        self.api.add_url_rule(BASE_URL+"/groupAlarms/<id>","get_group_alarm",self.get_group_alarm,methods=['GET'])
+       
         self.api.add_url_rule(BASE_URL+"/ungroupAlarms","ungroup_alarms",self.ungroup_alarms,methods=['POST'])
+        self.api.add_url_rule(BASE_URL+"/ungroupAlarms","get_ungroup_alarms",self.get_ungroup_alarms,methods=['GET'])
+        self.api.add_url_rule(BASE_URL+"/ungroupAlarms/<id>","get_ungroup_alarm",self.get_ungroup_alarm,methods=['GET'])
+       
         self.api.add_url_rule(BASE_URL+"/hub","subscribe",self.subscribe,methods=['POST'])
         self.api.add_url_rule(BASE_URL+"/hub/<id>","unsubscribe",self.unsubscribe,methods=['DELETE'])
         self.port = port
@@ -122,6 +136,28 @@ class AlarmWebService:
     def get_comment_alarm(self,version,id):
         query = {"id" : id}
         row = DbManager.query(DB_ALARM,TABLE_COMMENT_ALARM,query)
+        response_str = jsonpickle.encode(row)
+        return Response(response_str, 200, mimetype='application/json')
+
+    def get_group_alarms(self,version):
+        row = DbManager.get_all(DB_ALARM,TABLE_GROUP_ALARM)
+        response_str = jsonpickle.encode(row)
+        return Response(response_str, 200, mimetype='application/json')
+   
+    def get_group_alarm(self,version,id):
+        query = {"id" : id}
+        row = DbManager.query(DB_ALARM,TABLE_GROUP_ALARM,query)
+        response_str = jsonpickle.encode(row)
+        return Response(response_str, 200, mimetype='application/json')
+
+    def get_ungroup_alarms(self,version):
+        row = DbManager.get_all(DB_ALARM,TABLE_UNGROUP_ALARM)
+        response_str = jsonpickle.encode(row)
+        return Response(response_str, 200, mimetype='application/json')
+   
+    def get_ungroup_alarm(self,version,id):
+        query = {"id" : id}
+        row = DbManager.query(DB_ALARM,TABLE_UNGROUP_ALARM,query)
         response_str = jsonpickle.encode(row)
         return Response(response_str, 200, mimetype='application/json')
 
@@ -207,16 +243,44 @@ class AlarmWebService:
         clear_alarm['state'] = 'done'  
         DbManager.update(DB_ALARM,TABLE_CLEAR_ALARM,clear_alarm['id'],clear_alarm)
         return
-
-    def process_comment(self,comment_alarm):
-        alarmPattern = comment_alarm['alarmPattern']
+    
+    def process_group(self,request):
+        alarmPattern = request['correlatedAlarm']
         query =  {"$or" : alarmPattern}
         alarms = DbManager.query_many(DB_ALARM,TABLE_ALARM,query) 
-        comment_alarm['commentedAlarm'] = [] 
+        request['groupedAlarm'] = [] 
+        query =  request['parentAlarm']
+        parent_alarm = DbManager.query(DB_ALARM,TABLE_ALARM,query) 
+        if 'correlatedAlarm' not in parent_alarm:
+                parent_alarm['correlatedAlarm'] = []
+        request['groupedAlarm'] = [] 
+        for row in alarms:
+             if 'parentAlarm' not in row:
+                row['parentAlarm'] = []
+             row['parentAlarm'].append(request['parentAlarm'])
+             alarm = {}
+             alarm['id'] = row['id']
+             alarm['parentAlarm'] = []
+             for c in row['parentAlarm']:
+                alarm['parentAlarm'].append(c)
+             DbManager.update(DB_ALARM,TABLE_ALARM,row['id'],alarm)
+             request['groupedAlarm'].append(row)
+             parent_alarm['correlatedAlarm'].append(row)
+        request['state'] = 'done' 
+        request['groupedAlarm'].append(parent_alarm)
+        DbManager.update(DB_ALARM,TABLE_ALARM,parent_alarm['id'],parent_alarm) 
+        DbManager.update(DB_ALARM,TABLE_CLEAR_ALARM,request['id'],request)
+        return
+
+    def process_comment(self,request):
+        alarmPattern = request['alarmPattern']
+        query =  {"$or" : alarmPattern}
+        alarms = DbManager.query_many(DB_ALARM,TABLE_ALARM,query) 
+        request['commentedAlarm'] = [] 
         for row in alarms:
              if 'comment' not in row:
                  row['comment'] = []
-             row['comment'].append(comment_alarm['comment'])
+             row['comment'].append(request['comment'])
              alarm = {}
              alarm['id'] = row['id']
              alarm['comment']=[]
@@ -224,11 +288,11 @@ class AlarmWebService:
                 alarm['comment'].append(c)
              row['id'] = row['id'] 
              DbManager.update(DB_ALARM,TABLE_ALARM,row['id'],alarm)
-             comment_alarm['commentedAlarm'].append(row)
+             request['commentedAlarm'].append(row)
              print("\n\nalarm:")
              print(alarm)
-        comment_alarm['state'] = 'done'  
-        DbManager.update(DB_ALARM,TABLE_COMMENT_ALARM,comment_alarm['id'],comment_alarm)
+        request['state'] = 'done'  
+        DbManager.update(DB_ALARM,TABLE_COMMENT_ALARM,request['id'],request)
         return
     
     def ack_alarms(self,version):
@@ -297,7 +361,24 @@ class AlarmWebService:
         return
     
     def group_alarms(self,version):
-        return
+        data = request.get_json()
+        if ("sourceSystemId" not in data):
+            print(" missing sourceSystemId")
+            return Response("", 409 ,mimetype='application/json')
+        if ("alarmChangedTime" not in data):
+            print(" missing clearSystemId")
+            return Response("", 409 ,mimetype='application/json')
+        if ("parentAlarm" not in data):
+            print(" missing clearUserId")
+            return Response("", 409 ,mimetype='application/json')
+        if ("correlatedAlarm" not in data):
+            print(" missing alarmPattern")
+            return Response("", 409 ,mimetype='application/json')
+        data['state'] = "progress"
+        row = DbManager.insert(DB_ALARM,TABLE_GROUP_ALARM,data)
+        self.process_group(row)
+        response_str = jsonpickle.encode(row)
+        return Response(response_str, 200, mimetype='application/json')
 
     def subscribe(self,version):
         data = request.get_json()
