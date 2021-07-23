@@ -271,6 +271,43 @@ class AlarmWebService:
         DbManager.update(DB_ALARM,TABLE_ALARM,parent_alarm['id'],parent_alarm) 
         DbManager.update(DB_ALARM,TABLE_CLEAR_ALARM,request['id'],request)
         return
+    
+    def process_ungroup(self,request):
+        alarmPattern = request['correlatedAlarm']
+        query =  {"$or" : alarmPattern}
+        alarms = DbManager.query_many(DB_ALARM,TABLE_ALARM,query) 
+        request['ungroupedAlarm'] = [] 
+        query =  request['parentAlarm']
+        parent_alarm = DbManager.query(DB_ALARM,TABLE_ALARM,query) 
+        #Remove the parent
+        for row in alarms:
+             if 'parentAlarm' not in row:
+                continue
+             parentrows = []
+             for parentRow in row['parentAlarm']:
+                 if (parentRow['id'] == parent_alarm['id']):
+                     continue
+                 parentrows.append(parentRow)
+             row['parentAlarm'] = parentrows
+             alarm = {}
+             alarm['id'] = row['id']
+             alarm['parentAlarm'] = []
+             for c in row['parentAlarm']:
+                alarm['parentAlarm'].append(c)
+             DbManager.update(DB_ALARM,TABLE_ALARM,row['id'],alarm)
+             request['ungroupedAlarm'].append(row)
+        #remove the correlated alarms
+        parent_alarm["correlatedAlarm"] = []
+        for row in alarms:
+            for correlateRow in row['correlatedAlarm']:
+                if (row['id'] == correlateRow['id']):
+                    continue
+                parent_alarm["correlatedAlarm"].append(correlateRow)
+        request['state'] = 'done' 
+        request['ungroupedAlarm'].append(parent_alarm)
+        DbManager.update(DB_ALARM,TABLE_ALARM,parent_alarm['id'],parent_alarm) 
+        DbManager.update(DB_ALARM,TABLE_CLEAR_ALARM,request['id'],request)
+        return
 
     def process_comment(self,request):
         alarmPattern = request['alarmPattern']
@@ -379,6 +416,27 @@ class AlarmWebService:
         self.process_group(row)
         response_str = jsonpickle.encode(row)
         return Response(response_str, 200, mimetype='application/json')
+    
+    def ungroup_alarms(self,version):
+        data = request.get_json()
+        if ("sourceSystemId" not in data):
+            print(" missing sourceSystemId")
+            return Response("", 409 ,mimetype='application/json')
+        if ("alarmChangedTime" not in data):
+            print(" missing clearSystemId")
+            return Response("", 409 ,mimetype='application/json')
+        if ("parentAlarm" not in data):
+            print(" missing clearUserId")
+            return Response("", 409 ,mimetype='application/json')
+        if ("correlatedAlarm" not in data):
+            print(" missing correlatedAlarm")
+            return Response("", 409 ,mimetype='application/json')
+        data['state'] = "progress"
+        row = DbManager.insert(DB_ALARM,TABLE_GROUP_ALARM,data)
+        self.process_ungroup(row)
+        response_str = jsonpickle.encode(row)
+        return Response(response_str, 200, mimetype='application/json')
+
 
     def subscribe(self,version):
         data = request.get_json()
