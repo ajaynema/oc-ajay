@@ -1,10 +1,10 @@
 import sys, os.path
 
-sys.path.append("./../../db")
+sys.path.append("./../../")
 
 from flask import Flask,Response,request
 import jsonpickle
-from db_manager import DbManager
+from db.db_manager import DbManager
 
 BASE_URL="/tmf-api/alarmManagement/<version>"
 DB_ALARM="DB_ALARM"
