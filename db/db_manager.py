@@ -83,5 +83,12 @@ class DbManager:
         collection = db[table]
         data = collection.find_one(query)
         return data
+    @staticmethod
+    def query_many(database,table,query):
+        client = DbManager.get_connection()
+        db = client[database]
+        collection = db[table]
+        data = collection.find(query)
+        return data
 
     

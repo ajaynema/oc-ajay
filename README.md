@@ -87,3 +87,5 @@ https://pubhub.devnetcloud.com/media/yang-connector/docs/README.html
 https://pypi.org/project/pyats/
 https://www.ciscolive.com/c/dam/r/ciscolive/emea/docs/2019/pdf/BRKDEV-1368.pdf
 https://www.netacad.com/sites/default/files/images/careers/Webinars/DevNet/devnet_session_7_networkprogrammability_yang_netconf_restconf.pdf
+https://pythonhosted.org/an_example_pypi_project/setuptools.html
+https://setuptools.readthedocs.io/en/latest/userguide/quickstart.html
