@@ -393,11 +393,7 @@ class AlarmWebService:
         response_str = jsonpickle.encode(row)
         return Response(response_str, 200, mimetype='application/json')
 
-    
-    def ungroup_alarms(self,version):
-        return
-    
-    def group_alarms(self,version):
+    xdef group_alarms(self,version):
         data = request.get_json()
         if ("sourceSystemId" not in data):
             print(" missing sourceSystemId")
