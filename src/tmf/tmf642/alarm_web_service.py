@@ -57,6 +57,7 @@ class AlarmWebService:
         self.api.add_url_rule(BASE_URL+"/ungroupAlarms/<id>","get_ungroup_alarm",self.get_ungroup_alarm,methods=['GET'])
        
         self.api.add_url_rule(BASE_URL+"/hub","subscribe",self.subscribe,methods=['POST'])
+        self.api.add_url_rule(BASE_URL+"/hub","get_subscribe",self.get_subscribe,methods=['GET'])
         self.api.add_url_rule(BASE_URL+"/hub/<id>","unsubscribe",self.unsubscribe,methods=['DELETE'])
         self.port = port
 
@@ -393,7 +394,7 @@ class AlarmWebService:
         response_str = jsonpickle.encode(row)
         return Response(response_str, 200, mimetype='application/json')
 
-    xdef group_alarms(self,version):
+    def group_alarms(self,version):
         data = request.get_json()
         if ("sourceSystemId" not in data):
             print(" missing sourceSystemId")
@@ -456,6 +457,11 @@ class AlarmWebService:
             return Response("", 404 ,mimetype='application/json')
         DbManager.delete(DB_ALARM,"alarm_subscription",id)
         return Response("", 204, mimetype='application/json')
+
+    def get_subscribe(self,version):
+        row = DbManager.get_all(DB_ALARM,TABLE_ALARM_SUBSCRIPTION)
+        response_str = jsonpickle.encode(row)
+        return Response(response_str, 200, mimetype='application/json')
 
     def start(self):
         self.api.run(host='0.0.0.0', port=self.port)

@@ -20,25 +20,36 @@
  
  => Alarm APIs End points
 
-        Single Alarm Operation
-        - Create Alarm - "/api/v1/alarm",methods='POST'
-        - Modify Alarm - "/api/v1/alarm/<alarmId>",methods='PATCH'
-        - Delete Alarm - "/api/v1/alarm/<alarmId>/clear", methods='POST'
-        - Delete Alarm - "/api/v1/alarm/<alarmId>/delete", methods='POST'
-        - Delete Alarm - "/api/v1/alarm/<alarmId>", methods='DELETE'
-        - Get Alarm - "/api/v1/alarm/<alarmId>",methods='GET'
-
-        Multiple Alarms Operations
-        - Get Alarms - "/api/v1/alarms",methods='GET'
-        - Ack Alarms - "/api/v1/ackAlarms",methods='POST'
-        - Un Ack Alarms - "/api/v1/unAckAlarms", methods='POST'
-        - Clear Alarms - "/api/v1/clearAlarms", methods='POST'
-        - Comment Alarm - "/api/v1/commentsAlarms"methods='POST'
-        - Group Alarm - "/api/v1/groupAlarms",methods='POST'
-        - Un Group Alarm - "/api/v1/ungroupAlarms",methods='POST'
+        - Create Alarm - "/tmf-api/alarmManagement/v1/alarm",methods='POST' - Done
+        - Modify Alarm - "/tmf-api/alarmManagement/v1/alarm/<alarmId>",methods='PATCH'
+        - Delete Alarm - "/tmf-api/alarmManagement/v1/alarm/<alarmId>/clear", methods='POST' - Done
+        - Delete Alarm - "/tmf-api/alarmManagement/v1/alarm/<alarmId>/delete", methods='POST' - Done
+        - Delete Alarm - "/tmf-api/alarmManagement/v1/alarm/<alarmId>", methods='DELETE' - Done
+        - Get Alarm - "/tmf-api/alarmManagement/v1/alarm/<alarmId>",methods='GET' - Done
+        - Get Alarms - "/tmf-api/alarmManagement/v1/alarms",methods='GET' - Done
+        - Ack Alarms - "/tmf-api/alarmManagement/v1/ackAlarms",methods='POST' - Done
+        - Get Ack Alarms - "/tmf-api/alarmManagement/v1/ackAlarms",methods='GET' - Done
+        - Get Ack Alarms - "/tmf-api/alarmManagement/v1/ackAlarms/<id>",methods='GET' - Done
+        - Un Ack Alarms - "/tmf-api/alarmManagement/v1/unAckAlarms", methods='POST' - Done
+        - Get Un Ack Alarms - "/tmf-api/alarmManagement/v1/unAckAlarms", methods='GET' - Done
+        - Get Un Ack Alarms - "/tmf-api/alarmManagement/v1/unAckAlarms/<id>", methods='GET' - Done
+        - Clear Alarms - "/tmf-api/alarmManagement/v1/clearAlarms", methods='POST' - Done
+        - Get Clear Alarms - "/tmf-api/alarmManagement/v1/clearAlarms", methods='GET' - Done
+        - Get Clear Alarms - "/tmf-api/alarmManagement/v1/clearAlarms/<id>", methods='GET' - Done
+        - Comment Alarm - "/tmf-api/alarmManagement/v1/commentsAlarms"methods='POST' - Done
+        - Get Comment Alarm - "/tmf-api/alarmManagement/v1/commentsAlarms"methods='GET' - Done
+        - Get Comment Alarm - "/tmf-api/alarmManagement/v1/commentsAlarms/<id>"methods='GET' - Done
+        - Group Alarm - "/tmf-api/alarmManagement/v1/groupAlarms",methods='POST' - Done
+        - Get Group Alarm - "/tmf-api/alarmManagement/v1/groupAlarms",methods='GET' - Done
+        - Get Group Alarm - "/tmf-api/alarmManagement/v1/groupAlarms/<id>",methods='GET' - Done
+        - Un Group Alarm - "/tmf-api/alarmManagement/v1/ungroupAlarms",methods='POST' - Done
+        - Get Un Group Alarm - "/tmf-api/alarmManagement/v1/ungroupAlarms",methods='GET' - Done
+        - Get Un Group Alarm - "/tmf-api/alarmManagement/v1/ungroupAlarms/<id>",methods='GET' - Done
+       
         Pub/Sub
-        - Subscribe for Alarm -  "/api/v1/hub" , methods='POST'
-        - unsubscribe for Alarm -  "/api/v1/hub/<id>" , methods='DELETE'
+        - Subscribe for Alarm -  "/tmf-api/alarmManagement/v1/hub" , methods='POST'
+        - unsubscribe for Alarm -  "/tmf-api/alarmManagement/v1/hub/<id>" , methods='DELETE'
+        - Get Subscribe for Alarm -  "/tmf-api/alarmManagement/v1/hub" , methods='GET'
         - Publish the life cycle event to subscribed systems - <remote url>, method='POST'
         
 => Use cases
