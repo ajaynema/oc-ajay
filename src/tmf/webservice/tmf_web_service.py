@@ -32,3 +32,33 @@ class TmfWebService:
         row = DbManager.query(database,table,query,fields)
         response_str = jsonpickle.encode(row)
         return Response(response_str, 200, mimetype='application/json')
+
+    def get_field_from_path(self,path):
+        if path.startswith("/"):
+            path = path[1:]
+        path = path.replace('/','.')
+        return path
+
+    def patch(self, database, table, id, patch_data):
+        for row in patch_data:
+            if (row['op'] == "replace"):
+               path = row['path']
+               field_name = self.get_field_from_path(path)
+               value = row['value']
+               change_data = {}
+               change_data[field_name] = value
+               print(change_data)
+               DbManager.update(database,table,id,change_data)  
+            elif row['op'] == "add":
+               path = row['path']
+               field_name = self.get_field_from_path(path)
+               value = row['value']
+               change_data = {}
+               change_data[field_name] = value
+               DbManager.update(database,table,id,change_data) 
+            elif row['op'] == "remove":
+               path = row['path']
+               field_name = self.get_field_from_path(path)
+               DbManager.delete_field(database,table,id,field_name)      
+        return Response("", 200, mimetype='application/json')
+ 

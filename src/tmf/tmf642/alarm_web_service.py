@@ -80,37 +80,11 @@ class AlarmWebService(TmfWebService):
         response_str = jsonpickle.encode(row)
         return Response(response_str, 200, mimetype='application/json')
 
-    def get_field_from_path(self,path):
-        if path.startswith("/"):
-            path = path[1:]
-        path = path.replace('/','.')
-        return path
+    
 
     def modify_alarm(self,version,alarmId):
        data = request.get_json()
-       print(data)
-       for row in data:
-            if (row['op'] == "replace"):
-               path = row['path']
-               field_name = self.get_field_from_path(path)
-               value = row['value']
-               change_data = {}
-               change_data[field_name] = value
-               print(change_data)
-               DbManager.update(DB_ALARM,TABLE_ALARM,alarmId,change_data)  
-            elif row['op'] == "add":
-               path = row['path']
-               field_name = self.get_field_from_path(path)
-               value = row['value']
-               change_data = {}
-               change_data[field_name] = value
-               DbManager.update(DB_ALARM,TABLE_ALARM,alarmId,change_data) 
-            elif row['op'] == "remove":
-               path = row['path']
-               field_name = self.get_field_from_path(path)
-               DbManager.delete_field(DB_ALARM,TABLE_ALARM,alarmId,field_name)      
-       return Response("", 200, mimetype='application/json')
- 
+       return self.patch(DB_ALARM,TABLE_ALARM,alarmId,data)
     def delete_alarm(self,version,alarmId):
         query = {"id" : alarmId}
         row = DbManager.query(DB_ALARM,TABLE_ALARM,query)
