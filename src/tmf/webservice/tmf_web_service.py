@@ -9,13 +9,14 @@ from db.db_manager import DbManager
 class TmfWebService:
     def __init__(self,name="WebService",port=80):
         self.name = name
+        self.port = port
         self.api = Flask(self.name)
     
     def register(self, url,func,func_pointer,methods=['GET']):
         self.api.add_url_rule(url,func,func_pointer,methods=methods)
     
-    def start():
-        self.api.start()
+    def start(self):
+        self.api.run(host="0.0.0.0",port=self.port)
     
     def get_all(self, database,table):
         fields = request.args.get("fields") if (request.args.get("fields") is not None) else None

@@ -25,42 +25,42 @@ class AlarmWebService(TmfWebService):
     def __init__(self,name="AlarmWebService",port=80):
         super().__init__(name=name,port=port)
         #Single Alarm Operations
-        self.api.add_url_rule(BASE_URL+"/alarm","create_alarm",self.create_alarm,methods=['POST'])
-        self.api.add_url_rule(BASE_URL+"/alarm/<alarmId>","modify_alarm",self.modify_alarm,methods=['PATCH'])
-        self.api.add_url_rule(BASE_URL+"/alarm/<alarmId>","delete_alarm",self.delete_alarm,methods=['DELETE'])
-        self.api.add_url_rule(BASE_URL+"/alarm/<alarmId>","get_alarm",self.get_alarm,methods=['GET'])
+        self.register(BASE_URL+"/alarm","create_alarm",self.create_alarm,methods=['POST'])
+        self.register(BASE_URL+"/alarm/<alarmId>","modify_alarm",self.modify_alarm,methods=['PATCH'])
+        self.register(BASE_URL+"/alarm/<alarmId>","delete_alarm",self.delete_alarm,methods=['DELETE'])
+        self.register(BASE_URL+"/alarm/<alarmId>","get_alarm",self.get_alarm,methods=['GET'])
         #Multiple Alarms Operations
         self.register(BASE_URL+"/alarms","get_alarms",self.get_alarms,methods=['GET'])
         self.register(BASE_URL+"/alarm","get_alarms",self.get_alarms,methods=['GET'])
         
-        self.api.add_url_rule(BASE_URL+"/ackAlarms","ack_alarms",self.ack_alarms,methods=['POST'])
-        self.api.add_url_rule(BASE_URL+"/ackAlarms","get_ack_alarms",self.get_ack_alarms,methods=['GET'])
-        self.api.add_url_rule(BASE_URL+"/ackAlarms/<id>","get_ack_alarm",self.get_ack_alarm,methods=['GET'])
+        self.register(BASE_URL+"/ackAlarms","ack_alarms",self.ack_alarms,methods=['POST'])
+        self.register(BASE_URL+"/ackAlarms","get_ack_alarms",self.get_ack_alarms,methods=['GET'])
+        self.register(BASE_URL+"/ackAlarms/<id>","get_ack_alarm",self.get_ack_alarm,methods=['GET'])
         
-        self.api.add_url_rule(BASE_URL+"/unAckAlarms","unack_alarms",self.unack_alarms,methods=['POST'])
-        self.api.add_url_rule(BASE_URL+"/unAckAlarms","get_unack_alarms",self.get_unack_alarms,methods=['GET'])
-        self.api.add_url_rule(BASE_URL+"/unAckAlarms/<id>","get_unack_alarm",self.get_unack_alarm,methods=['GET'])
+        self.register(BASE_URL+"/unAckAlarms","unack_alarms",self.unack_alarms,methods=['POST'])
+        self.register(BASE_URL+"/unAckAlarms","get_unack_alarms",self.get_unack_alarms,methods=['GET'])
+        self.register(BASE_URL+"/unAckAlarms/<id>","get_unack_alarm",self.get_unack_alarm,methods=['GET'])
         
-        self.api.add_url_rule(BASE_URL+"/clearAlarms","clear_alarms",self.clear_alarms,methods=['POST'])
-        self.api.add_url_rule(BASE_URL+"/clearAlarms","get_clear_alarms",self.get_clear_alarms,methods=['GET'])
-        self.api.add_url_rule(BASE_URL+"/clearAlarms/<id>","get_clear_alarm",self.get_clear_alarm,methods=['GET'])
+        self.register(BASE_URL+"/clearAlarms","clear_alarms",self.clear_alarms,methods=['POST'])
+        self.register(BASE_URL+"/clearAlarms","get_clear_alarms",self.get_clear_alarms,methods=['GET'])
+        self.register(BASE_URL+"/clearAlarms/<id>","get_clear_alarm",self.get_clear_alarm,methods=['GET'])
         
-        self.api.add_url_rule(BASE_URL+"/commentAlarms","comment_alarms",self.comment_alarms,methods=['POST'])
-        self.api.add_url_rule(BASE_URL+"/commentAlarms","get_comment_alarms",self.get_comment_alarms,methods=['GET'])
-        self.api.add_url_rule(BASE_URL+"/commentAlarms/<id>","get_comment_alarm",self.get_comment_alarm,methods=['GET'])
+        self.register(BASE_URL+"/commentAlarms","comment_alarms",self.comment_alarms,methods=['POST'])
+        self.register(BASE_URL+"/commentAlarms","get_comment_alarms",self.get_comment_alarms,methods=['GET'])
+        self.register(BASE_URL+"/commentAlarms/<id>","get_comment_alarm",self.get_comment_alarm,methods=['GET'])
         
-        self.api.add_url_rule(BASE_URL+"/groupAlarms","group_alarms",self.group_alarms,methods=['POST'])
-        self.api.add_url_rule(BASE_URL+"/groupAlarms","get_group_alarms",self.get_group_alarms,methods=['GET'])
-        self.api.add_url_rule(BASE_URL+"/groupAlarms/<id>","get_group_alarm",self.get_group_alarm,methods=['GET'])
+        self.register(BASE_URL+"/groupAlarms","group_alarms",self.group_alarms,methods=['POST'])
+        self.register(BASE_URL+"/groupAlarms","get_group_alarms",self.get_group_alarms,methods=['GET'])
+        self.register(BASE_URL+"/groupAlarms/<id>","get_group_alarm",self.get_group_alarm,methods=['GET'])
        
-        self.api.add_url_rule(BASE_URL+"/ungroupAlarms","ungroup_alarms",self.ungroup_alarms,methods=['POST'])
-        self.api.add_url_rule(BASE_URL+"/ungroupAlarms","get_ungroup_alarms",self.get_ungroup_alarms,methods=['GET'])
-        self.api.add_url_rule(BASE_URL+"/ungroupAlarms/<id>","get_ungroup_alarm",self.get_ungroup_alarm,methods=['GET'])
+        self.register(BASE_URL+"/ungroupAlarms","ungroup_alarms",self.ungroup_alarms,methods=['POST'])
+        self.register(BASE_URL+"/ungroupAlarms","get_ungroup_alarms",self.get_ungroup_alarms,methods=['GET'])
+        self.register(BASE_URL+"/ungroupAlarms/<id>","get_ungroup_alarm",self.get_ungroup_alarm,methods=['GET'])
        
-        self.api.add_url_rule(BASE_URL+"/hub","subscribe",self.subscribe,methods=['POST'])
-        self.api.add_url_rule(BASE_URL+"/hub","get_subscribe",self.get_subscribe,methods=['GET'])
-        self.api.add_url_rule(BASE_URL+"/hub/<id>","unsubscribe",self.unsubscribe,methods=['DELETE'])
-        self.port = port
+        self.register(BASE_URL+"/hub","subscribe",self.subscribe,methods=['POST'])
+        self.register(BASE_URL+"/hub","get_subscribe",self.get_subscribe,methods=['GET'])
+        self.register(BASE_URL+"/hub/<id>","unsubscribe",self.unsubscribe,methods=['DELETE'])
+        
 
     def create_alarm(self,version):
         data = request.get_json()
@@ -98,7 +98,7 @@ class AlarmWebService(TmfWebService):
         return self.get_all(DB_ALARM,TABLE_ALARM)
     
     def get_ack_alarm(self,version,id):
-        return self.get_by_id(DB_ALARM,TABLE_ACK_ALARM,alarmId)
+        return self.get_by_id(DB_ALARM,TABLE_ACK_ALARM,id)
     
 
     def get_unack_alarms(self,version):
@@ -427,10 +427,6 @@ class AlarmWebService(TmfWebService):
             return Response("", 404 ,mimetype='application/json')
         DbManager.delete(DB_ALARM,"alarm_subscription",id)
         return Response("", 204, mimetype='application/json')
-
-    
-    def start(self):
-        self.api.run(host='0.0.0.0', port=self.port)
 
 if __name__ == '__main__':
       webserice = AlarmWebService()
