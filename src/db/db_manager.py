@@ -65,30 +65,49 @@ class DbManager:
         return data
     
     @staticmethod
-    def get_all(database,table):
+    def get_all(database,table,fields=None):
+        projection= None
+        if fields is not None:
+            projection = {}
+            tokens = fields.split(",")
+            for token in tokens:
+                projection[token] = True
+
         client = DbManager.get_connection()
         db = client[database]
         collection = db[table]
         myquery = {}
-        rows = collection.find(myquery)
+        rows = collection.find(myquery,projection=projection)
         data = []
         for row in rows:
           data.append(row)
         return data
 
     @staticmethod
-    def query(database,table,query):
+    def query(database,table,query,fields=None):
+        projection= None
+        if fields is not None:
+            projection = {}
+            tokens = fields.split(",")
+            for token in tokens:
+                projection[token] = True
         client = DbManager.get_connection()
         db = client[database]
         collection = db[table]
-        data = collection.find_one(query)
+        data = collection.find_one(query,projection=projection)
         return data
     @staticmethod
-    def query_many(database,table,query):
+    def query_many(database,table,query,fields=None):
+        projection= None
+        if fields is not None:
+            projection = {}
+            tokens = fields.split(",")
+            for token in tokens:
+                projection[token] = True
         client = DbManager.get_connection()
         db = client[database]
         collection = db[table]
-        data = collection.find(query)
+        data = collection.find(query,projection=projection)
         return data
 
     

@@ -91,79 +91,93 @@ class AlarmWebService:
         return Response("", 204, mimetype='application/json')
     
     def get_alarm(self,version,alarmId):
+        fields = request.args.get("fields")
         query = {"id" : alarmId}
-        row = DbManager.query(DB_ALARM,TABLE_ALARM,query)
+        row = DbManager.query(DB_ALARM,TABLE_ALARM,query,fields)
         response_str = jsonpickle.encode(row)
         return Response(response_str, 200, mimetype='application/json')
 
     def get_alarms(self,version):
-        row = DbManager.get_all(DB_ALARM,TABLE_ALARM)
+        fields = request.args.get("fields")
+        row = DbManager.get_all(DB_ALARM,TABLE_ALARM,fields)
         response_str = jsonpickle.encode(row)
         return Response(response_str, 200, mimetype='application/json')
     
     def get_ack_alarm(self,version,id):
         query = {"id" : id}
-        row = DbManager.query(DB_ALARM,TABLE_ACK_ALARM,query)
+        fields = request.args.get("fields")
+        row = DbManager.query(DB_ALARM,TABLE_ACK_ALARM,query,fields)
         response_str = jsonpickle.encode(row)
         return Response(response_str, 200, mimetype='application/json')
 
     def get_unack_alarms(self,version):
-        row = DbManager.get_all(DB_ALARM,TABLE_UNACK_ALARM)
+        fields = request.args.get("fields")
+        row = DbManager.get_all(DB_ALARM,TABLE_UNACK_ALARM,fields)
         response_str = jsonpickle.encode(row)
         return Response(response_str, 200, mimetype='application/json')
    
     def get_unack_alarm(self,version,id):
         query = {"id" : id}
-        row = DbManager.query(DB_ALARM,TABLE_CLEAR_ALARM,query)
+        fields = request.args.get("fields")
+        row = DbManager.query(DB_ALARM,TABLE_CLEAR_ALARM,query,fields)
         response_str = jsonpickle.encode(row)
         return Response(response_str, 200, mimetype='application/json')
 
     def get_clear_alarms(self,version):
-        row = DbManager.get_all(DB_ALARM,TABLE_CLEAR_ALARM)
+        fields = request.args.get("fields")
+        row = DbManager.get_all(DB_ALARM,TABLE_CLEAR_ALARM,fields)
         response_str = jsonpickle.encode(row)
         return Response(response_str, 200, mimetype='application/json')
    
     def get_clear_alarm(self,version,id):
+        fields = request.args.get("fields")
         query = {"id" : id}
-        row = DbManager.query(DB_ALARM,TABLE_CLEAR_ALARM,query)
+        row = DbManager.query(DB_ALARM,TABLE_CLEAR_ALARM,query,fields)
         response_str = jsonpickle.encode(row)
         return Response(response_str, 200, mimetype='application/json')
 
     def get_comment_alarms(self,version):
-        row = DbManager.get_all(DB_ALARM,TABLE_COMMENT_ALARM)
+        fields = request.args.get("fields")
+        row = DbManager.get_all(DB_ALARM,TABLE_COMMENT_ALARM,fields)
         response_str = jsonpickle.encode(row)
         return Response(response_str, 200, mimetype='application/json')
    
     def get_comment_alarm(self,version,id):
+        fields = request.args.get("fields")
         query = {"id" : id}
-        row = DbManager.query(DB_ALARM,TABLE_COMMENT_ALARM,query)
+        row = DbManager.query(DB_ALARM,TABLE_COMMENT_ALARM,query,fields)
         response_str = jsonpickle.encode(row)
         return Response(response_str, 200, mimetype='application/json')
 
     def get_group_alarms(self,version):
-        row = DbManager.get_all(DB_ALARM,TABLE_GROUP_ALARM)
+        fields = request.args.get("fields")
+        row = DbManager.get_all(DB_ALARM,TABLE_GROUP_ALARM,fields)
         response_str = jsonpickle.encode(row)
         return Response(response_str, 200, mimetype='application/json')
    
     def get_group_alarm(self,version,id):
+        fields = request.args.get("fields")
         query = {"id" : id}
-        row = DbManager.query(DB_ALARM,TABLE_GROUP_ALARM,query)
+        row = DbManager.query(DB_ALARM,TABLE_GROUP_ALARM,query,fields)
         response_str = jsonpickle.encode(row)
         return Response(response_str, 200, mimetype='application/json')
 
     def get_ungroup_alarms(self,version):
-        row = DbManager.get_all(DB_ALARM,TABLE_UNGROUP_ALARM)
+        fields = request.args.get("fields")
+        row = DbManager.get_all(DB_ALARM,TABLE_UNGROUP_ALARM,fields)
         response_str = jsonpickle.encode(row)
         return Response(response_str, 200, mimetype='application/json')
    
     def get_ungroup_alarm(self,version,id):
+        fields = request.args.get("fields")
         query = {"id" : id}
-        row = DbManager.query(DB_ALARM,TABLE_UNGROUP_ALARM,query)
+        row = DbManager.query(DB_ALARM,TABLE_UNGROUP_ALARM,query,fields)
         response_str = jsonpickle.encode(row)
         return Response(response_str, 200, mimetype='application/json')
 
     def get_ack_alarms(self,version):
-        row = DbManager.get_all(DB_ALARM,TABLE_ACK_ALARM)
+        fields = request.args.get("fields")
+        row = DbManager.get_all(DB_ALARM,TABLE_ACK_ALARM,fields)
         response_str = jsonpickle.encode(row)
         return Response(response_str, 200, mimetype='application/json')
     
@@ -459,7 +473,8 @@ class AlarmWebService:
         return Response("", 204, mimetype='application/json')
 
     def get_subscribe(self,version):
-        row = DbManager.get_all(DB_ALARM,TABLE_ALARM_SUBSCRIPTION)
+        fields = request.args.get("fields")
+        row = DbManager.get_all(DB_ALARM,TABLE_ALARM_SUBSCRIPTION,fields)
         response_str = jsonpickle.encode(row)
         return Response(response_str, 200, mimetype='application/json')
 
