@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 import pymongo
 import uuid
-
+MAX_ROW_RETURN_COUNT=200
 class DbManager:
 
     @staticmethod
@@ -65,19 +65,22 @@ class DbManager:
         return data
     
     @staticmethod
-    def get_all(database,table,fields=None):
+    def get_all(database,table,fields=None,offset=0,limit=MAX_ROW_RETURN_COUNT):
         projection= None
         if fields is not None:
             projection = {}
             tokens = fields.split(",")
             for token in tokens:
                 projection[token] = True
-
+        if (offset is None):
+            offset = 0
+        if (limit is None):
+            limit = MAX_ROW_RETURN_COUNT    
         client = DbManager.get_connection()
         db = client[database]
         collection = db[table]
         myquery = {}
-        rows = collection.find(myquery,projection=projection)
+        rows = collection.find(myquery,projection=projection,skip=offset,limit=limit)
         data = []
         for row in rows:
           data.append(row)
@@ -97,17 +100,21 @@ class DbManager:
         data = collection.find_one(query,projection=projection)
         return data
     @staticmethod
-    def query_many(database,table,query,fields=None):
+    def query_many(database,table,query,fields=None,offset=0,limit=MAX_ROW_RETURN_COUNT):
         projection= None
         if fields is not None:
             projection = {}
             tokens = fields.split(",")
             for token in tokens:
                 projection[token] = True
+        if (offset is None):
+            offset = 0
+        if (limit is None):
+            limit = MAX_ROW_RETURN_COUNT   
         client = DbManager.get_connection()
         db = client[database]
         collection = db[table]
-        data = collection.find(query,projection=projection)
+        data = collection.find(query,projection=projection,skip=offset,limit=limit)
         return data
 
     

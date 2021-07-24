@@ -1,10 +1,12 @@
 import sys, os.path
 
 sys.path.append("./../../")
+sys.path.append("./../")
 
 from flask import Flask,Response,request
 import jsonpickle
 from db.db_manager import DbManager
+from webservice.tmf_web_service import TmfWebService
 
 BASE_URL="/tmf-api/alarmManagement/<version>"
 DB_ALARM="DB_ALARM"
@@ -19,18 +21,17 @@ TABLE_UNGROUP_ALARM="ungroup_alarm"
 TABLE_ALARM_SUBSCRIPTION="alarm_subscription"
 
 
-class AlarmWebService:
+class AlarmWebService(TmfWebService):
     def __init__(self,name="AlarmWebService",port=80):
-        self.name = name
-        self.api = Flask(self.name)  
+        super().__init__(name=name,port=port)
         #Single Alarm Operations
         self.api.add_url_rule(BASE_URL+"/alarm","create_alarm",self.create_alarm,methods=['POST'])
         self.api.add_url_rule(BASE_URL+"/alarm/<alarmId>","modify_alarm",self.modify_alarm,methods=['PATCH'])
         self.api.add_url_rule(BASE_URL+"/alarm/<alarmId>","delete_alarm",self.delete_alarm,methods=['DELETE'])
         self.api.add_url_rule(BASE_URL+"/alarm/<alarmId>","get_alarm",self.get_alarm,methods=['GET'])
         #Multiple Alarms Operations
-        self.api.add_url_rule(BASE_URL+"/alarms","get_alarms",self.get_alarms,methods=['GET'])
-        self.api.add_url_rule(BASE_URL+"/alarm","get_alarms",self.get_alarms,methods=['GET'])
+        self.register(BASE_URL+"/alarms","get_alarms",self.get_alarms,methods=['GET'])
+        self.register(BASE_URL+"/alarm","get_alarms",self.get_alarms,methods=['GET'])
         
         self.api.add_url_rule(BASE_URL+"/ackAlarms","ack_alarms",self.ack_alarms,methods=['POST'])
         self.api.add_url_rule(BASE_URL+"/ackAlarms","get_ack_alarms",self.get_ack_alarms,methods=['GET'])
@@ -98,10 +99,7 @@ class AlarmWebService:
         return Response(response_str, 200, mimetype='application/json')
 
     def get_alarms(self,version):
-        fields = request.args.get("fields")
-        row = DbManager.get_all(DB_ALARM,TABLE_ALARM,fields)
-        response_str = jsonpickle.encode(row)
-        return Response(response_str, 200, mimetype='application/json')
+        return self.get_all(DB_ALARM,TABLE_ALARM)
     
     def get_ack_alarm(self,version,id):
         query = {"id" : id}
@@ -111,10 +109,7 @@ class AlarmWebService:
         return Response(response_str, 200, mimetype='application/json')
 
     def get_unack_alarms(self,version):
-        fields = request.args.get("fields")
-        row = DbManager.get_all(DB_ALARM,TABLE_UNACK_ALARM,fields)
-        response_str = jsonpickle.encode(row)
-        return Response(response_str, 200, mimetype='application/json')
+        return self.get_all(DB_ALARM,TABLE_UNACK_ALARM)
    
     def get_unack_alarm(self,version,id):
         query = {"id" : id}
@@ -124,10 +119,7 @@ class AlarmWebService:
         return Response(response_str, 200, mimetype='application/json')
 
     def get_clear_alarms(self,version):
-        fields = request.args.get("fields")
-        row = DbManager.get_all(DB_ALARM,TABLE_CLEAR_ALARM,fields)
-        response_str = jsonpickle.encode(row)
-        return Response(response_str, 200, mimetype='application/json')
+        return self.get_all(DB_ALARM,TABLE_CLEAR_ALARM)
    
     def get_clear_alarm(self,version,id):
         fields = request.args.get("fields")
@@ -137,10 +129,7 @@ class AlarmWebService:
         return Response(response_str, 200, mimetype='application/json')
 
     def get_comment_alarms(self,version):
-        fields = request.args.get("fields")
-        row = DbManager.get_all(DB_ALARM,TABLE_COMMENT_ALARM,fields)
-        response_str = jsonpickle.encode(row)
-        return Response(response_str, 200, mimetype='application/json')
+        return self.get_all(DB_ALARM,TABLE_COMMENT_ALARM)
    
     def get_comment_alarm(self,version,id):
         fields = request.args.get("fields")
@@ -150,10 +139,7 @@ class AlarmWebService:
         return Response(response_str, 200, mimetype='application/json')
 
     def get_group_alarms(self,version):
-        fields = request.args.get("fields")
-        row = DbManager.get_all(DB_ALARM,TABLE_GROUP_ALARM,fields)
-        response_str = jsonpickle.encode(row)
-        return Response(response_str, 200, mimetype='application/json')
+       return self.get_all(DB_ALARM,TABLE_GROUP_ALARM)
    
     def get_group_alarm(self,version,id):
         fields = request.args.get("fields")
@@ -163,10 +149,7 @@ class AlarmWebService:
         return Response(response_str, 200, mimetype='application/json')
 
     def get_ungroup_alarms(self,version):
-        fields = request.args.get("fields")
-        row = DbManager.get_all(DB_ALARM,TABLE_UNGROUP_ALARM,fields)
-        response_str = jsonpickle.encode(row)
-        return Response(response_str, 200, mimetype='application/json')
+        return self.get_all(DB_ALARM,TABLE_UNGROUP_ALARM)
    
     def get_ungroup_alarm(self,version,id):
         fields = request.args.get("fields")
@@ -176,11 +159,11 @@ class AlarmWebService:
         return Response(response_str, 200, mimetype='application/json')
 
     def get_ack_alarms(self,version):
-        fields = request.args.get("fields")
-        row = DbManager.get_all(DB_ALARM,TABLE_ACK_ALARM,fields)
-        response_str = jsonpickle.encode(row)
-        return Response(response_str, 200, mimetype='application/json')
+        return self.get_all(DB_ALARM,TABLE_ACK_ALARM)
     
+    def get_subscribe(self,version):
+        return self.get_all(DB_ALARM,TABLE_ALARM_SUBSCRIPTION)
+
     def process_unack(self,ack_alarm):
         alarmPattern = ack_alarm['alarmPattern']
         query =  {"$or" : alarmPattern}
@@ -472,12 +455,7 @@ class AlarmWebService:
         DbManager.delete(DB_ALARM,"alarm_subscription",id)
         return Response("", 204, mimetype='application/json')
 
-    def get_subscribe(self,version):
-        fields = request.args.get("fields")
-        row = DbManager.get_all(DB_ALARM,TABLE_ALARM_SUBSCRIPTION,fields)
-        response_str = jsonpickle.encode(row)
-        return Response(response_str, 200, mimetype='application/json')
-
+    
     def start(self):
         self.api.run(host='0.0.0.0', port=self.port)
 
