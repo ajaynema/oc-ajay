@@ -43,9 +43,21 @@ class DbManager:
         collection = db[table]
         myquery = { "_id": id }
         newvalues = { "$set": data }
+        print(newvalues)
         collection.update_one(myquery, newvalues)
         return
 
+    @staticmethod
+    def delete_field(database,table,id,field_name):
+        client = DbManager.get_connection()
+        db = client[database]
+        collection = db[table]
+        myquery = { "_id": id }
+        data = {}
+        data[field_name] = None
+        delete_field = { "$unset": data }
+        collection.update_one(myquery, delete_field)
+        return
     @staticmethod
     def delete(database,table,id):
         client = DbManager.get_connection()
