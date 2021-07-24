@@ -24,3 +24,10 @@ class TmfWebService:
         row = DbManager.get_all(database,table,fields=fields,offset=offset,limit=limit)
         response_str = jsonpickle.encode(row)
         return Response(response_str, 200, mimetype='application/json')
+    
+    def get_by_id(self,database,table,id):
+        fields = request.args.get("fields")
+        query = {"id" : id}
+        row = DbManager.query(database,table,query,fields)
+        response_str = jsonpickle.encode(row)
+        return Response(response_str, 200, mimetype='application/json')

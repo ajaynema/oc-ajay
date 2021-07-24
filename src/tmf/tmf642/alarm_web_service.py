@@ -92,72 +92,45 @@ class AlarmWebService(TmfWebService):
         return Response("", 204, mimetype='application/json')
     
     def get_alarm(self,version,alarmId):
-        fields = request.args.get("fields")
-        query = {"id" : alarmId}
-        row = DbManager.query(DB_ALARM,TABLE_ALARM,query,fields)
-        response_str = jsonpickle.encode(row)
-        return Response(response_str, 200, mimetype='application/json')
+        return self.get_by_id(DB_ALARM,TABLE_ALARM,alarmId)
 
     def get_alarms(self,version):
         return self.get_all(DB_ALARM,TABLE_ALARM)
     
     def get_ack_alarm(self,version,id):
-        query = {"id" : id}
-        fields = request.args.get("fields")
-        row = DbManager.query(DB_ALARM,TABLE_ACK_ALARM,query,fields)
-        response_str = jsonpickle.encode(row)
-        return Response(response_str, 200, mimetype='application/json')
+        return self.get_by_id(DB_ALARM,TABLE_ACK_ALARM,alarmId)
+    
 
     def get_unack_alarms(self,version):
         return self.get_all(DB_ALARM,TABLE_UNACK_ALARM)
    
     def get_unack_alarm(self,version,id):
-        query = {"id" : id}
-        fields = request.args.get("fields")
-        row = DbManager.query(DB_ALARM,TABLE_CLEAR_ALARM,query,fields)
-        response_str = jsonpickle.encode(row)
-        return Response(response_str, 200, mimetype='application/json')
-
+        return self.get_by_id(DB_ALARM,TABLE_UNACK_ALARM,id)
+ 
     def get_clear_alarms(self,version):
         return self.get_all(DB_ALARM,TABLE_CLEAR_ALARM)
    
     def get_clear_alarm(self,version,id):
-        fields = request.args.get("fields")
-        query = {"id" : id}
-        row = DbManager.query(DB_ALARM,TABLE_CLEAR_ALARM,query,fields)
-        response_str = jsonpickle.encode(row)
-        return Response(response_str, 200, mimetype='application/json')
-
+        return self.get_by_id(DB_ALARM,TABLE_CLEAR_ALARM,id)
+ 
     def get_comment_alarms(self,version):
         return self.get_all(DB_ALARM,TABLE_COMMENT_ALARM)
    
     def get_comment_alarm(self,version,id):
-        fields = request.args.get("fields")
-        query = {"id" : id}
-        row = DbManager.query(DB_ALARM,TABLE_COMMENT_ALARM,query,fields)
-        response_str = jsonpickle.encode(row)
-        return Response(response_str, 200, mimetype='application/json')
+        return self.get_by_id(DB_ALARM,TABLE_COMMENT_ALARM,id)
 
     def get_group_alarms(self,version):
        return self.get_all(DB_ALARM,TABLE_GROUP_ALARM)
    
     def get_group_alarm(self,version,id):
-        fields = request.args.get("fields")
-        query = {"id" : id}
-        row = DbManager.query(DB_ALARM,TABLE_GROUP_ALARM,query,fields)
-        response_str = jsonpickle.encode(row)
-        return Response(response_str, 200, mimetype='application/json')
-
+        return self.get_by_id(DB_ALARM,TABLE_GROUP_ALARM,id)
+ 
     def get_ungroup_alarms(self,version):
         return self.get_all(DB_ALARM,TABLE_UNGROUP_ALARM)
    
     def get_ungroup_alarm(self,version,id):
-        fields = request.args.get("fields")
-        query = {"id" : id}
-        row = DbManager.query(DB_ALARM,TABLE_UNGROUP_ALARM,query,fields)
-        response_str = jsonpickle.encode(row)
-        return Response(response_str, 200, mimetype='application/json')
-
+        return self.get_by_id(DB_ALARM,TABLE_UNGROUP_ALARM,id)
+ 
     def get_ack_alarms(self,version):
         return self.get_all(DB_ALARM,TABLE_ACK_ALARM)
     
