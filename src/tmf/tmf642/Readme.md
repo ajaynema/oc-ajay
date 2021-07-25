@@ -60,6 +60,8 @@
 
 => Authorization for APIs
 
+=> Validation of the payload fields
+
 => Use cases
 
     1. Alarm Owning System -> Notified System
