@@ -85,7 +85,7 @@ Q - What are the alarm life cycle event supported?
 
 Q - How to run the TMF642 alarm web service ?
     
-    cd <root>/tmf/tmf642
+    cd $SRC/tmf/tmf642
     python3 alarm_web_service.py
 
     
