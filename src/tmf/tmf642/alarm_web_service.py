@@ -7,6 +7,8 @@ from flask import Flask,Response,request
 import jsonpickle
 from db.db_manager import DbManager
 from webservice.tmf_web_service import TmfWebService
+import datetime
+from event_type import EventType
 
 BASE_URL="/tmf-api/alarmManagement/<version>"
 DB_ALARM="DB_ALARM"
@@ -17,6 +19,7 @@ TABLE_CLEAR_ALARM="clear_alarm"
 TABLE_COMMENT_ALARM="comment_alarm"
 TABLE_GROUP_ALARM="group_alarm"
 TABLE_UNGROUP_ALARM="ungroup_alarm"
+TABLE_ALARM_EVENT="alarm_event"
 
 TABLE_ALARM_SUBSCRIPTION="alarm_subscription"
 
@@ -61,6 +64,19 @@ class AlarmWebService(TmfWebService):
         self.register(BASE_URL+"/hub","get_subscribe",self.get_subscribe,methods=['GET'])
         self.register(BASE_URL+"/hub/<id>","unsubscribe",self.unsubscribe,methods=['DELETE'])
         
+        
+
+    def get_formated_time(self):
+        now = datetime.datetime.now()
+        return now.strftime("%Y-%m-%dT%H:%M:%S%z")
+
+    def create_event(self,eventType,event_data):
+        event = {}
+        event['eventType']  = eventType.name
+        event['event'] = event_data
+        event['eventTime'] = self.get_formated_time()
+        event['status'] = "pending"
+        DbManager.insert(DB_ALARM,TABLE_ALARM_EVENT,event)
 
     def create_alarm(self,version):
         data = request.get_json()
@@ -77,20 +93,25 @@ class AlarmWebService(TmfWebService):
         if ("alarmRaisedTime" not in data):
             return Response("", 409 ,mimetype='application/json')
         row = DbManager.insert(DB_ALARM,TABLE_ALARM,data)
+        self.create_event(EventType.AlarmCreateEvent,data)
         response_str = jsonpickle.encode(row)
         return Response(response_str, 200, mimetype='application/json')
 
     
+   
 
     def modify_alarm(self,version,alarmId):
        data = request.get_json()
+       self.create_event(EventType.AlarmAttributeValueChangeEvent,data)
        return self.patch(DB_ALARM,TABLE_ALARM,alarmId,data)
+
     def delete_alarm(self,version,alarmId):
         query = {"id" : alarmId}
         row = DbManager.query(DB_ALARM,TABLE_ALARM,query)
         if (row is None):
             return Response("", 404 ,mimetype='application/json')
         DbManager.delete(DB_ALARM,TABLE_ALARM,alarmId)
+        self.create_event(EventType.AlarmDeleteEvent,row)
         return Response("", 204, mimetype='application/json')
     
     def get_alarm(self,version,alarmId):
@@ -317,6 +338,7 @@ class AlarmWebService(TmfWebService):
         row = DbManager.insert(DB_ALARM,TABLE_ACK_ALARM,data)
         self.process_ack(row)
         response_str = jsonpickle.encode(row)
+        self.create_event(EventType.AckAlarmsCreateEvent,data)
         return Response(response_str, 200, mimetype='application/json')
    
     def unack_alarms(self,version):
@@ -330,6 +352,7 @@ class AlarmWebService(TmfWebService):
         data['state'] = "progress"
         row = DbManager.insert(DB_ALARM,TABLE_UNACK_ALARM,data)
         self.process_unack(row)
+        self.create_event(EventType.UnAckAlarmsCreateEvent,data)
         response_str = jsonpickle.encode(row)
         return Response(response_str, 200, mimetype='application/json')
 
@@ -345,6 +368,7 @@ class AlarmWebService(TmfWebService):
         data['state'] = "progress"
         row = DbManager.insert(DB_ALARM,TABLE_COMMENT_ALARM,data)
         self.process_comment(row)
+        self.create_event(EventType.CommentAlarmsCreateEvent,data)
         response_str = jsonpickle.encode(row)
         return Response(response_str, 200, mimetype='application/json')
 
@@ -363,6 +387,7 @@ class AlarmWebService(TmfWebService):
         data['state'] = "progress"
         row = DbManager.insert(DB_ALARM,TABLE_CLEAR_ALARM,data)
         self.process_clear(row)
+        self.create_event(EventType.ClearAlarmsCreateEvent,data)
         response_str = jsonpickle.encode(row)
         return Response(response_str, 200, mimetype='application/json')
 
@@ -383,6 +408,7 @@ class AlarmWebService(TmfWebService):
         data['state'] = "progress"
         row = DbManager.insert(DB_ALARM,TABLE_GROUP_ALARM,data)
         self.process_group(row)
+        self.create_event(EventType.GroupAlarmsCreateEvent,data)
         response_str = jsonpickle.encode(row)
         return Response(response_str, 200, mimetype='application/json')
     
@@ -403,6 +429,7 @@ class AlarmWebService(TmfWebService):
         data['state'] = "progress"
         row = DbManager.insert(DB_ALARM,TABLE_GROUP_ALARM,data)
         self.process_ungroup(row)
+        self.create_event(EventType.UnGroupAlarmsCreateEvent,data)
         response_str = jsonpickle.encode(row)
         return Response(response_str, 200, mimetype='application/json')
 
