@@ -55,7 +55,11 @@
         - Publish the life cycle event to subscribed systems - <remote url>, method='POST'
 
 => Swagger support for APIs
-        
+
+=> Authentication for APIs
+
+=> Authorization for APIs
+
 => Use cases
 
     1. Alarm Owning System -> Notified System
