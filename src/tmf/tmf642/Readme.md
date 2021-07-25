@@ -53,6 +53,8 @@
         - unsubscribe for Alarm -  "/tmf-api/alarmManagement/v1/hub/<id>" , methods='DELETE' - Done
         - Get Subscribe for Alarm -  "/tmf-api/alarmManagement/v1/hub" , methods='GET' - Done
         - Publish the life cycle event to subscribed systems - <remote url>, method='POST'
+
+=> Swagger support for APIs
         
 => Use cases
 
@@ -60,6 +62,22 @@
     
     2. Alarm Source System -> Alarm Owning System 
 
-     
+Q - What is developed here ?
+    TMF642 enabled web service, which manages the life cycle of alarm and generate events for listers.
+Q - What are the alarm life cycle event supported?
+    Alarm creation
+    Alarm modification
+    Alarm deletion
+    Comment on Alarm
+    Acknowledge Alarm
+    Unacknowledge
+    Clear the Alarm
+    Subscribe for alarms related events
+    Unsubscribe of alarms related events
+Q - How to run the TMF642 alarm web service ?
+    cd <root>/tmf/tmf642
+    python3 alarm_web_service.py
+
+    
 
  
