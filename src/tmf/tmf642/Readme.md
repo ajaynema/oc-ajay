@@ -17,11 +17,13 @@
  => Define TMF perceieved severity - Done
  
  => Define TMF Alarm type - Done
+
+ => Define TMF Event type - Done
  
  => Alarm APIs End points
 
         - Create Alarm - "/tmf-api/alarmManagement/v1/alarm",methods='POST' - Done
-        - Modify Alarm - "/tmf-api/alarmManagement/v1/alarm/<alarmId>",methods='PATCH'
+        - Modify Alarm - "/tmf-api/alarmManagement/v1/alarm/<alarmId>",methods='PATCH' -Done
         - Delete Alarm - "/tmf-api/alarmManagement/v1/alarm/<alarmId>/clear", methods='POST' - Done
         - Delete Alarm - "/tmf-api/alarmManagement/v1/alarm/<alarmId>/delete", methods='POST' - Done
         - Delete Alarm - "/tmf-api/alarmManagement/v1/alarm/<alarmId>", methods='DELETE' - Done
@@ -47,9 +49,9 @@
         - Get Un Group Alarm - "/tmf-api/alarmManagement/v1/ungroupAlarms/<id>",methods='GET' - Done
        
         Pub/Sub
-        - Subscribe for Alarm -  "/tmf-api/alarmManagement/v1/hub" , methods='POST'
-        - unsubscribe for Alarm -  "/tmf-api/alarmManagement/v1/hub/<id>" , methods='DELETE'
-        - Get Subscribe for Alarm -  "/tmf-api/alarmManagement/v1/hub" , methods='GET'
+        - Subscribe for Alarm -  "/tmf-api/alarmManagement/v1/hub" , methods='POST'  - Done
+        - unsubscribe for Alarm -  "/tmf-api/alarmManagement/v1/hub/<id>" , methods='DELETE' - Done
+        - Get Subscribe for Alarm -  "/tmf-api/alarmManagement/v1/hub" , methods='GET' - Done
         - Publish the life cycle event to subscribed systems - <remote url>, method='POST'
         
 => Use cases
