@@ -3,56 +3,56 @@ from alarm_probable_cause import AlarmProbableCause
 from alarm_perceived_severity import AlarmPerceivedSeverity
 class Alarm:
     def __init__(self):
-        self.id = ""
-        self.href = ""
-        self.baseType = ""
-        self.type = ""
-        self.schemaLocation = ""
-        self.externalAlarmId = ""
-        self.state = ""
-        self.alarmType = AlarmType.unkownn
-        self.perceivedSeverity = AlarmPerceivedSeverity.indeterminate
-        self.probableCause = AlarmProbableCause.other
+        self.id = None
+        self.href = None
+        self.baseType = None
+        self.type = None
+        self.schemaLocation = None
+        self.externalAlarmId = None
+        self.state = None
+        self.alarmType = None
+        self.perceivedSeverity = None
+        self.probableCause = None
         
-        self.specificProblem = ""
-        self.specificProblem = ""
+        self.specificProblem = None
+        self.specificProblem = None
         
-        self.alarmedObject = {}
-        self.alarmedObjectType = ""
+        self.alarmedObject = None
+        self.alarmedObjectType = None
 
-        self.sourceSystemId = ""
-        self.alarmDetails = ""
+        self.sourceSystemId = None
+        self.alarmDetails = None
         self.alarmEscalation = False
         self.serviceAffecting = False
-        self.reportingSystemId=""
+        self.reportingSystemId=None
         
         #times
-        self.alarmRaisedTime = ""
-        self.alarmReportingTime = ""
-        self.alarmChangedTime = ""
+        self.alarmRaisedTime = None
+        self.alarmReportingTime = None
+        self.alarmChangedTime = None
         
         #clear
-        self.alarmClearedTime = ""
-        self.clearSystemId=""
-        self.clearUserId=""
+        self.alarmClearedTime = None
+        self.clearSystemId=None
+        self.clearUserId=None
         
         #ack
-        self.ackSystemId = ""
-        self.ackUserId = ""
-        self.ackTime = ""
-        self.ackState = ""
-        self.crossedThresholdInformation = {}
+        self.ackSystemId = None
+        self.ackUserId = None
+        self.ackTime = None
+        self.ackState = None
+        self.crossedThresholdInformation = None
         
-        self.isRoot = ""
-        self.isRootCause =False #A boolean. Indicates whether the alarm is a root cause alarm.
-        self.plannedOutageIndicator =""
-        self.proposedRepairedActions=""
+        self.isRoot = None
+        self.isRootCause =None #A boolean. Indicates whether the alarm is a root cause alarm.
+        self.plannedOutageIndicator =None
+        self.proposedRepairedActions=None
 
-        self.place = []
-        self.parentAlarm = []
-        self.correlatedAlarm = []
-        self.comment = []
-        self.affectedService = []
+        self.place = None
+        self.parentAlarm = None   #[]
+        self.correlatedAlarm = None  #[]
+        self.comment = None  #[]
+        self.affectedService = None  #[]
        
 
 

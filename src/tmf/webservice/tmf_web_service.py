@@ -12,6 +12,10 @@ class TmfWebService:
         self.port = port
         self.api = Flask(self.name)
     
+    def get_formated_time(self):
+        now = datetime.datetime.now()
+        return now.strftime("%Y-%m-%dT%H:%M:%S%z")
+
     def register(self, url,func,func_pointer,methods=['GET']):
         self.api.add_url_rule(url,func,func_pointer,methods=methods)
     

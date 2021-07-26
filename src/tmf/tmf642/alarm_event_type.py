@@ -1,6 +1,6 @@
 from enum import Enum
 
-class EventType(Enum):
+class AlarmEventType(Enum):
     AlarmCreateEvent = "AlarmCreateEvent"
     AlarmAttributeValueChangeEvent="AlarmAttributeValueChangeEvent"
     AlarmStateChangeEvent="AlarmStateChangeEvent"
