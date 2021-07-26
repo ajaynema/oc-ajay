@@ -60,7 +60,7 @@ Q - What is developed here ?
 
 Q - What are the resource inventory life cycle event supported?
     
-Q - How to run the TMF642 alarm web service ?
+Q - How to run the TMF639 Resource Inventory Web Service ?
     
     cd $SRC/tmf/tmf639
     python3 resource_inventory_web_service.py
