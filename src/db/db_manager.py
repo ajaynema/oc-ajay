@@ -77,7 +77,7 @@ class DbManager:
         return data
     
     @staticmethod
-    def get_all(database,table,fields=None,offset=0,limit=MAX_ROW_RETURN_COUNT):
+    def get_all(database,table,fields=None,offset=0,limit=MAX_ROW_RETURN_COUNT,proxy_query=None):
         projection= None
         if fields is not None:
             projection = {}
@@ -91,7 +91,7 @@ class DbManager:
         client = DbManager.get_connection()
         db = client[database]
         collection = db[table]
-        myquery = {}
+        myquery = proxy_query
         rows = collection.find(myquery,projection=projection,skip=offset,limit=limit)
         data = []
         for row in rows:

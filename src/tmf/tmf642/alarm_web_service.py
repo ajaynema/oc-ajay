@@ -9,19 +9,19 @@ from db.db_manager import DbManager
 from webservice.tmf_web_service import TmfWebService
 import datetime
 from alarm_event_type import AlarmEventType
+from alarm_table_helper import AlarmTableHelper
+from ack_alarm_table_helper import AckAlarmTableHelper
+from unack_alarm_table_helper import UnackAlarmTableHelper
+from group_alarm_table_helper import GroupAlarmTableHelper
+from ungroup_alarm_table_helper import UngroupAlarmTableHelper
+from alarm_event_table_helper import AlarmEventTableHelper
+from clear_alarm_table_helper import ClearAlarmTableHelper
+from comment_alarm_table_helper import CommentAlarmTableHelper
+from alarm_subscription_table_helper import AlarmSubscriptionTableHelper
+
+
 
 BASE_URL="/tmf-api/alarmManagement/<version>"
-DB_ALARM="DB_ALARM"
-TABLE_ALARM="alarm"
-TABLE_ACK_ALARM="ack_alarm"
-TABLE_UNACK_ALARM="unack_alarm"
-TABLE_CLEAR_ALARM="clear_alarm"
-TABLE_COMMENT_ALARM="comment_alarm"
-TABLE_GROUP_ALARM="group_alarm"
-TABLE_UNGROUP_ALARM="ungroup_alarm"
-TABLE_ALARM_EVENT="alarm_event"
-
-TABLE_ALARM_SUBSCRIPTION="alarm_event_subscription"
 
 
 class AlarmWebService(TmfWebService):
@@ -71,7 +71,7 @@ class AlarmWebService(TmfWebService):
         event['event'] = event_data
         event['eventTime'] = self.get_formated_time()
         event['status'] = "pending"
-        DbManager.insert(DB_ALARM,TABLE_ALARM_EVENT,event)
+        AlarmEventTableHelper().insert(event)
 
     def create_alarm(self,version):
         data = request.get_json()
@@ -87,78 +87,74 @@ class AlarmWebService(TmfWebService):
             return Response("", 409 ,mimetype='application/json')
         if ("alarmRaisedTime" not in data):
             return Response("", 409 ,mimetype='application/json')
-        row = DbManager.insert(DB_ALARM,TABLE_ALARM,data)
+        row = AlarmTableHelper().insert(data)
         self.create_event(AlarmEventType.AlarmCreateEvent,data)
         response_str = jsonpickle.encode(row)
         return Response(response_str, 200, mimetype='application/json')
 
-    
-   
-
     def modify_alarm(self,version,alarmId):
        data = request.get_json()
        self.create_event(AlarmEventType.AlarmAttributeValueChangeEvent,data)
-       return self.patch(DB_ALARM,TABLE_ALARM,alarmId,data)
+       return self.patch(AlarmTableHelper(),alarmId,data)
 
     def delete_alarm(self,version,alarmId):
         query = {"id" : alarmId}
-        row = DbManager.query(DB_ALARM,TABLE_ALARM,query)
+        row = AlarmTableHelper().get_by_id(id)
         if (row is None):
             return Response("", 404 ,mimetype='application/json')
-        DbManager.delete(DB_ALARM,TABLE_ALARM,alarmId)
+        AlarmTableHelper().delete(alarmId)
         self.create_event(AlarmEventType.AlarmDeleteEvent,row)
         return Response("", 204, mimetype='application/json')
     
     def get_alarm(self,version,alarmId):
-        return self.get_by_id(DB_ALARM,TABLE_ALARM,alarmId)
+        return self.get_by_id(AlarmTableHelper(),alarmId)
 
     def get_alarms(self,version):
-        return self.get_all(DB_ALARM,TABLE_ALARM)
+        return self.get_all(AlarmTableHelper())
     
     def get_ack_alarm(self,version,id):
-        return self.get_by_id(DB_ALARM,TABLE_ACK_ALARM,id)
+        return self.get_by_id(AckAlarmTableHelper(),id)
     
-
+    def get_ack_alarms(self,version):
+        return self.get_all(AckAlarmTableHelper())
+  
     def get_unack_alarms(self,version):
-        return self.get_all(DB_ALARM,TABLE_UNACK_ALARM)
+        return self.get_all(UnackAlarmTableHelper())
    
     def get_unack_alarm(self,version,id):
-        return self.get_by_id(DB_ALARM,TABLE_UNACK_ALARM,id)
+        return self.get_by_id(UnackAlarmTableHelper(),id)
  
     def get_clear_alarms(self,version):
-        return self.get_all(DB_ALARM,TABLE_CLEAR_ALARM)
+        return self.get_all(ClearAlarmTableHelper())
    
     def get_clear_alarm(self,version,id):
-        return self.get_by_id(DB_ALARM,TABLE_CLEAR_ALARM,id)
+        return self.get_by_id(ClearAlarmTableHelper(),id)
  
     def get_comment_alarms(self,version):
-        return self.get_all(DB_ALARM,TABLE_COMMENT_ALARM)
+        return self.get_all(CommentAlarmTableHelper())
    
     def get_comment_alarm(self,version,id):
-        return self.get_by_id(DB_ALARM,TABLE_COMMENT_ALARM,id)
+        return self.get_by_id(CommentAlarmTableHelper(),id)
 
     def get_group_alarms(self,version):
-       return self.get_all(DB_ALARM,TABLE_GROUP_ALARM)
+       return self.get_all(GroupAlarmTableHelper())
    
     def get_group_alarm(self,version,id):
-        return self.get_by_id(DB_ALARM,TABLE_GROUP_ALARM,id)
+        return self.get_by_id(GroupAlarmTableHelper(),id)
  
     def get_ungroup_alarms(self,version):
-        return self.get_all(DB_ALARM,TABLE_UNGROUP_ALARM)
+        return self.get_all(UngroupAlarmTableHelper())
    
     def get_ungroup_alarm(self,version,id):
-        return self.get_by_id(DB_ALARM,TABLE_UNGROUP_ALARM,id)
+        return self.get_by_id(UngroupAlarmTableHelper(),id)
  
-    def get_ack_alarms(self,version):
-        return self.get_all(DB_ALARM,TABLE_ACK_ALARM)
-    
     def get_subscribe(self,version):
-        return self.get_all(DB_ALARM,TABLE_ALARM_SUBSCRIPTION)
+        return self.get_all(AlarmSubscriptionTableHelper())
 
     def process_unack(self,ack_alarm):
         alarmPattern = ack_alarm['alarmPattern']
         query =  {"$or" : alarmPattern}
-        alarms = DbManager.query_many(DB_ALARM,TABLE_ALARM,query) 
+        alarms = AlarmTableHelper().query_many(query) 
         ack_alarm['unackedAlarm'] = [] 
         for row in alarms:
              alarm = {}
@@ -174,16 +170,16 @@ class AlarmWebService(TmfWebService):
                  
              alarm['ackState'] = "UNacknowledged"
              row['ackState'] = "UNacknowledged"
-             alarm = DbManager.update(DB_ALARM,TABLE_ALARM,row['id'],alarm)
+             alarm = AlarmTableHelper().update(row['id'],alarm)
              ack_alarm['unackedAlarm'].append(row)
         ack_alarm['state'] = 'done'  
-        DbManager.update(DB_ALARM,TABLE_UNACK_ALARM,ack_alarm['id'],ack_alarm)
+        UnackAlarmTableHelper().update(ack_alarm['id'],ack_alarm)
         return
     
     def process_ack(self,ack_alarm):
         alarmPattern = ack_alarm['alarmPattern']
         query =  {"$or" : alarmPattern}
-        alarms = DbManager.query_many(DB_ALARM,TABLE_ALARM,query) 
+        alarms = AlarmTableHelper().query_many(query)
         ack_alarm['ackedAlarm'] = [] 
         for row in alarms:
              alarm = {}
@@ -199,47 +195,47 @@ class AlarmWebService(TmfWebService):
                  
              alarm['ackState'] = "acknowledged"
              row['ackState'] = "acknowledged"
-             DbManager.update(DB_ALARM,TABLE_ALARM,row['id'],alarm)
+             AlarmTableHelper().update(row['id'],alarm)
              ack_alarm['ackedAlarm'].append(row)
         ack_alarm['state'] = 'done'  
-        DbManager.update(DB_ALARM,TABLE_ACK_ALARM,ack_alarm['id'],ack_alarm)
+        AckAlarmTableHelper.update(ack_alarm['id'],ack_alarm)
         return
 
-    def process_clear(self,clear_alarm):
-        alarmPattern = clear_alarm['alarmPattern']
+    def process_clear(self,request):
+        alarmPattern = request['alarmPattern']
         query =  {"$or" : alarmPattern}
-        alarms = DbManager.query_many(DB_ALARM,TABLE_ALARM,query) 
-        clear_alarm['clearedAlarm'] = [] 
+        alarms = AlarmTableHelper().query_many(query)
+        request['clearedAlarm'] = [] 
         for row in alarms:
              alarm = {}
              alarm['id'] = row['id']
-             alarm['clearSystemId'] = clear_alarm['clearSystemId']
-             alarm['clearUserId'] = clear_alarm['clearUserId']
+             alarm['clearSystemId'] = request['clearSystemId']
+             alarm['clearUserId'] = request['clearUserId']
              row['id'] = row['id']
-             row['clearSystemId'] = clear_alarm['clearSystemId']
-             row['clearUserId'] = clear_alarm['clearUserId']
-             if 'alarmClearedTime' in clear_alarm:
-                alarm['alarmClearedTime'] = clear_alarm['alarmClearedTime']
-                row['alarmClearedTime'] = clear_alarm['alarmClearedTime']
+             row['clearSystemId'] = request['clearSystemId']
+             row['clearUserId'] = request['clearUserId']
+             if 'alarmClearedTime' in request:
+                alarm['alarmClearedTime'] = request['alarmClearedTime']
+                row['alarmClearedTime'] = request['alarmClearedTime']
                  
              alarm['state'] = "cleared"
              alarm['perceivedSeverity'] = "cleared"
              
              row['state'] = "cleared"
              row['perceivedSeverity'] = "cleared"
-             DbManager.update(DB_ALARM,TABLE_ALARM,row['id'],alarm)
-             clear_alarm['clearedAlarm'].append(row)
-        clear_alarm['state'] = 'done'  
-        DbManager.update(DB_ALARM,TABLE_CLEAR_ALARM,clear_alarm['id'],clear_alarm)
+             AlarmTableHelper().update(row['id'],alarm)
+             request['clearedAlarm'].append(row)
+        request['state'] = 'done'  
+        ClearAlarmTableHelper().update(request['id'],request)
         return
     
     def process_group(self,request):
         alarmPattern = request['correlatedAlarm']
         query =  {"$or" : alarmPattern}
-        alarms = DbManager.query_many(DB_ALARM,TABLE_ALARM,query) 
+        alarms = AlarmTableHelper().query_many(query)  
         request['groupedAlarm'] = [] 
         query =  request['parentAlarm']
-        parent_alarm = DbManager.query(DB_ALARM,TABLE_ALARM,query) 
+        parent_alarm = AlarmTableHelper().query(query)  
         if 'correlatedAlarm' not in parent_alarm:
                 parent_alarm['correlatedAlarm'] = []
         request['groupedAlarm'] = [] 
@@ -252,22 +248,22 @@ class AlarmWebService(TmfWebService):
              alarm['parentAlarm'] = []
              for c in row['parentAlarm']:
                 alarm['parentAlarm'].append(c)
-             DbManager.update(DB_ALARM,TABLE_ALARM,row['id'],alarm)
+             AlarmTableHelper().update(row['id'],alarm)
              request['groupedAlarm'].append(row)
              parent_alarm['correlatedAlarm'].append(row)
         request['state'] = 'done' 
         request['groupedAlarm'].append(parent_alarm)
-        DbManager.update(DB_ALARM,TABLE_ALARM,parent_alarm['id'],parent_alarm) 
-        DbManager.update(DB_ALARM,TABLE_CLEAR_ALARM,request['id'],request)
+        AlarmTableHelper().update(parent_alarm['id'],parent_alarm) 
+        GroupAlarmTableHelper().update(request['id'],request)
         return
     
     def process_ungroup(self,request):
         alarmPattern = request['correlatedAlarm']
         query =  {"$or" : alarmPattern}
-        alarms = DbManager.query_many(DB_ALARM,TABLE_ALARM,query) 
+        alarms = AlarmTableHelper().query_many(query)  
         request['ungroupedAlarm'] = [] 
         query =  request['parentAlarm']
-        parent_alarm = DbManager.query(DB_ALARM,TABLE_ALARM,query) 
+        parent_alarm = AlarmTableHelper().query(query)  
         #Remove the parent
         for row in alarms:
              if 'parentAlarm' not in row:
@@ -283,7 +279,7 @@ class AlarmWebService(TmfWebService):
              alarm['parentAlarm'] = []
              for c in row['parentAlarm']:
                 alarm['parentAlarm'].append(c)
-             DbManager.update(DB_ALARM,TABLE_ALARM,row['id'],alarm)
+             AlarmTableHelper().update(row['id'],alarm)
              request['ungroupedAlarm'].append(row)
         #remove the correlated alarms
         parent_alarm["correlatedAlarm"] = []
@@ -294,14 +290,14 @@ class AlarmWebService(TmfWebService):
                 parent_alarm["correlatedAlarm"].append(correlateRow)
         request['state'] = 'done' 
         request['ungroupedAlarm'].append(parent_alarm)
-        DbManager.update(DB_ALARM,TABLE_ALARM,parent_alarm['id'],parent_alarm) 
-        DbManager.update(DB_ALARM,TABLE_CLEAR_ALARM,request['id'],request)
+        AlarmTableHelper().update(parent_alarm['id'],parent_alarm) 
+        UngroupAlarmTableHelper().update(request['id'],request)
         return
 
     def process_comment(self,request):
         alarmPattern = request['alarmPattern']
         query =  {"$or" : alarmPattern}
-        alarms = DbManager.query_many(DB_ALARM,TABLE_ALARM,query) 
+        alarms = AlarmTableHelper().query_many(query) 
         request['commentedAlarm'] = [] 
         for row in alarms:
              if 'comment' not in row:
@@ -313,12 +309,12 @@ class AlarmWebService(TmfWebService):
              for c in row['comment']:
                 alarm['comment'].append(c)
              row['id'] = row['id'] 
-             DbManager.update(DB_ALARM,TABLE_ALARM,row['id'],alarm)
+             AlarmTableHelper().update(row['id'],alarm)
              request['commentedAlarm'].append(row)
              print("\n\nalarm:")
              print(alarm)
         request['state'] = 'done'  
-        DbManager.update(DB_ALARM,TABLE_COMMENT_ALARM,request['id'],request)
+        CommentAlarmTableHelper().update(request['id'],request)
         return
     
     def ack_alarms(self,version):
@@ -330,7 +326,7 @@ class AlarmWebService(TmfWebService):
         if ("alarmPattern" not in data):
             return Response("", 409 ,mimetype='application/json')
         data['state'] = "progress"
-        row = DbManager.insert(DB_ALARM,TABLE_ACK_ALARM,data)
+        row = AckAlarmTableHelper().insert(data)
         self.process_ack(row)
         response_str = jsonpickle.encode(row)
         self.create_event(AlarmEventType.AckAlarmsCreateEvent,data)
@@ -345,7 +341,7 @@ class AlarmWebService(TmfWebService):
         if ("alarmPattern" not in data):
             return Response("", 409 ,mimetype='application/json')
         data['state'] = "progress"
-        row = DbManager.insert(DB_ALARM,TABLE_UNACK_ALARM,data)
+        row = UnackAlarmTableHelper().insert(data)
         self.process_unack(row)
         self.create_event(AlarmEventType.UnAckAlarmsCreateEvent,data)
         response_str = jsonpickle.encode(row)
@@ -361,7 +357,7 @@ class AlarmWebService(TmfWebService):
             print(" missing alarmPattern")
             return Response("", 409 ,mimetype='application/json')
         data['state'] = "progress"
-        row = DbManager.insert(DB_ALARM,TABLE_COMMENT_ALARM,data)
+        row = CommentAlarmTableHelper().insert(data)
         self.process_comment(row)
         self.create_event(AlarmEventType.CommentAlarmsCreateEvent,data)
         response_str = jsonpickle.encode(row)
@@ -380,7 +376,7 @@ class AlarmWebService(TmfWebService):
             print(" missing alarmPattern")
             return Response("", 409 ,mimetype='application/json')
         data['state'] = "progress"
-        row = DbManager.insert(DB_ALARM,TABLE_CLEAR_ALARM,data)
+        row = ClearAlarmTableHelper().insert(data)
         self.process_clear(row)
         self.create_event(AlarmEventType.ClearAlarmsCreateEvent,data)
         response_str = jsonpickle.encode(row)
@@ -401,7 +397,7 @@ class AlarmWebService(TmfWebService):
             print(" missing alarmPattern")
             return Response("", 409 ,mimetype='application/json')
         data['state'] = "progress"
-        row = DbManager.insert(DB_ALARM,TABLE_GROUP_ALARM,data)
+        row = GroupAlarmTableHelper().insert(data)
         self.process_group(row)
         self.create_event(AlarmEventType.GroupAlarmsCreateEvent,data)
         response_str = jsonpickle.encode(row)
@@ -422,7 +418,7 @@ class AlarmWebService(TmfWebService):
             print(" missing correlatedAlarm")
             return Response("", 409 ,mimetype='application/json')
         data['state'] = "progress"
-        row = DbManager.insert(DB_ALARM,TABLE_GROUP_ALARM,data)
+        row = UngroupAlarmTableHelper().insert(data)
         self.process_ungroup(row)
         self.create_event(AlarmEventType.UnGroupAlarmsCreateEvent,data)
         response_str = jsonpickle.encode(row)
@@ -433,10 +429,10 @@ class AlarmWebService(TmfWebService):
         data = request.get_json()
         callback = data['callback']
         query = {"callback" : callback}
-        row = DbManager.query(DB_ALARM,"alarm_subscription",query)
+        row = AlarmSubscriptionTableHelper.query(query)
         if (row is not None):
             return Response("", 409 ,mimetype='application/json')
-        row = DbManager.insert(DB_ALARM,TABLE_ALARM_SUBSCRIPTION,data)
+        row = AlarmSubscriptionTableHelper().insert(data)
         result={}
         result['id'] = row['id']
         result['callback'] = row['callback']
@@ -445,11 +441,10 @@ class AlarmWebService(TmfWebService):
         return Response(response_str, 200, mimetype='application/json')
 
     def unsubscribe(self,version,id):
-        query = {"id" : id}
-        row = DbManager.query(DB_ALARM,TABLE_ALARM_SUBSCRIPTION,query)
+        row = UnackAlarmTableHelper().get_by_id(id)
         if (row is None):
             return Response("", 404 ,mimetype='application/json')
-        DbManager.delete(DB_ALARM,"alarm_subscription",id)
+        AlarmSubscriptionTableHelper().delete(id)
         return Response("", 204, mimetype='application/json')
 
 if __name__ == '__main__':
