@@ -6,11 +6,24 @@
 
 
  ## Fun Activities
- => Define statndard Resource Object - Done
+ => Define statndard resource classes - Done
  
     - Resource
     - PhysicalResource
     - LogicalResource
+    - Equipment
+    - Note
+    - Place
+    - ResourceAttachment
+    - ResourceCharacteristic
+    - ResourceParty
+    - ResourceRef
+    - ResourceRelationship
+    - ResourceSpecification
+
+ => Define Enum - Done
+     
+     - ResourceState
 
  => Resource Inventory APIs End points
 

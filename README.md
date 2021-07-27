@@ -1,11 +1,11 @@
-# Fun and Learn Tech Series with Ajay
+# Tech Learn Series
 
 ## oc-nlp-ajay - Open config UI and NLP Interface and integration with TMF Bussiness model for automation and monitoring for networking device using YANG.
 
-Project is tech fun and learn series by Ajay to learn the **python**, **YANG**, **gRPC**, **gNMI**, **NETCONF**, **TMF APIs** and **AI/ML**. 
+Project is tech fun and learn series to learn the **python**, **YANG**, **gRPC**, **gNMI**, **NETCONF**, **TMF APIs** and **AI/ML**. 
 Same time trying to make useful **tools** and **framework for automation and monitoring** for **networking devices** for **telecom** and **networking programmers**. 
 
-### Fun activities:
+### Learning Track:
 
 ####    DONE:
 
@@ -48,6 +48,12 @@ Same time trying to make useful **tools** and **framework for automation and mon
 => BPMN workflow engine for automation
 
 => Docker image for easy to deploy and use.
+
+## TMF Standard Implementation
+
+=> [TMF642 - Alarm Management Implementation - Done](https://github.com/ajaynema/oc-nlp-ajay/blob/main/src/tmf/tmf642/Readme.md)
+
+=> [TMF639 - Resource Inventory Management Implementation - Done](https://github.com/ajaynema/oc-nlp-ajay/blob/main/src/tmf/tmf639/Readme.md)
 
 
 ## Packages
