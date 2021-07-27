@@ -22,6 +22,7 @@
     - ResourceSpecification
 
  => Define statndard Resource Enum - Done
+     
      - ResourceState
 
  => Resource Inventory APIs End points
