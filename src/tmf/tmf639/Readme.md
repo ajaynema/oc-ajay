@@ -6,7 +6,7 @@
 
 
  ## Fun Activities
- => Define statndard Resource Object - Done
+ => Define statndard resource classes - Done
  
     - Resource
     - PhysicalResource
@@ -21,7 +21,7 @@
     - ResourceRelationship
     - ResourceSpecification
 
- => Define statndard Resource Enum - Done
+ => Define Enum - Done
      
      - ResourceState
 
