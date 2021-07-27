@@ -11,6 +11,18 @@
     - Resource
     - PhysicalResource
     - LogicalResource
+    - Equipment
+    - Note
+    - Place
+    - ResourceAttachment
+    - ResourceCharacteristic
+    - ResourceParty
+    - ResourceRef
+    - ResourceRelationship
+    - ResourceSpecification
+
+ => Define statndard Resource Enum - Done
+     - ResourceState
 
  => Resource Inventory APIs End points
 
