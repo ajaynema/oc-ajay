@@ -198,7 +198,7 @@ class AlarmWebService(TmfWebService):
              AlarmTableHelper().update(row['id'],alarm)
              ack_alarm['ackedAlarm'].append(row)
         ack_alarm['state'] = 'done'  
-        AckAlarmTableHelper.update(ack_alarm['id'],ack_alarm)
+        AckAlarmTableHelper().update(ack_alarm['id'],ack_alarm)
         return
 
     def process_clear(self,request):
