@@ -18,6 +18,8 @@ class DbManager:
     def insert(database,table,data):
         if "id" not in data:
             data['id'] = DbManager.get_unique_id()
+        if data['id'] is None:
+            data['id'] = DbManager.get_unique_id()
         data['_id'] = data['id']
         client = DbManager.get_connection()
         db = client[database]

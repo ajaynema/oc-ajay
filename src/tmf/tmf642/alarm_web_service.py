@@ -75,6 +75,7 @@ class AlarmWebService(TmfWebService):
 
     def create_alarm(self,version):
         data = request.get_json()
+        print(data)
         if ("alarmType" not in data):
             return Response("", 409 ,mimetype='application/json')
         if ("perceivedSeverity" not in data):
