@@ -48,12 +48,15 @@ class UIFromYANGJson:
             if (len(fields) > 0):
                 parent_object['fields'] = fields
         elif (type == "list"):
-            other_ui_objects=[]
+            other_ui_objects={}
+            fields=[]
             subtree = array_object[1]
             for key in subtree:
+                 #print(key)
                  ui_object ={}
                  sub_tree_object = subtree[key]
                  parent_object['type'] = "list"
+                 ui_object['type'] = "block"
                  self.getUICompoment(ui_object,sub_tree_object)
                  ui_object['key'] = key
                  if (key == "config"):
@@ -63,7 +66,15 @@ class UIFromYANGJson:
                     ui_object['type'] = "block"  
                     parent_object['state_tree'] = ui_object
                  else:
-                    other_ui_objects.append(ui_object)
+                    #print(ui_object['key']) 
+                    if (ui_object['type'] == "field"):
+                        fields.append(ui_object)
+                    else:
+                        other_ui_objects[ui_object['key']] = ui_object
+            if (len(other_ui_objects) > 0):
+                parent_object['other_tree'] = other_ui_objects        
+            if (len(fields) > 0):
+                parent_object['fields'] = fields
             if len(array_object) > 0:
                 if len(array_object[2]) > 0:
                     key_tree = array_object[2][0]
@@ -201,10 +212,10 @@ class UIFromYANGJson:
        # print(view)
         
 if __name__ == '__main__':
-      uiFromYANGJson = UIFromYANGJson(jsonfile="system")
-      view = uiFromYANGJson.getView(path="/memory")
-      print(view)
-     # json_data = uiFromYANGJson.loadJson()
-     # ui_data = uiFromYANGJson.json2UI(json_data)
+      uiFromYANGJson = UIFromYANGJson(jsonfile="network-instances")
+      #view = uiFromYANGJson.getView(path="/network-instance")
+      #print(view)
+      json_data = uiFromYANGJson.loadJson()
+      ui_data = uiFromYANGJson.json2UI(json_data)
      # uiFromYANGJson.getUIDataFromPath(ui_data,"/dns")
-      #print(json.dumps(ui_data))
+      print(json.dumps(ui_data))
