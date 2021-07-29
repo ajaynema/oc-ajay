@@ -7,9 +7,10 @@ import jsonpickle
 from db.db_manager import DbManager
 
 class TmfWebService:
-    def __init__(self,name="WebService",port=80):
+    def __init__(self,name="WebService",host="0.0.0.0",port=80):
         self.name = name
         self.port = port
+        self.host = host
         self.api = Flask(self.name)
     
     def get_formated_time(self):
@@ -20,7 +21,7 @@ class TmfWebService:
         self.api.add_url_rule(url,func,func_pointer,methods=methods)
     
     def start(self):
-        self.api.run(host="0.0.0.0",port=self.port)
+        self.api.run(host=self.host,port=self.port)
     
     def get_all(self, helper):
         fields = request.args.get("fields") if (request.args.get("fields") is not None) else None
