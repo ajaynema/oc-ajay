@@ -22,8 +22,10 @@ class UIWebService:
          return self.yang_ui(json, path="/"+path)
 
     def yang_ui(self,json,path="/"):
+        print(path)
+        op = request.args.get("op")
         uiFromYANGJson =  UIFromYANGJson(jsonfile=json)
-        response_str  = uiFromYANGJson.getView(path=path)
+        response_str  = uiFromYANGJson.getView(path=path,op=op)
         return Response(response_str, 200, mimetype='text/html; charset=UTF-8')
 
     def start(self):

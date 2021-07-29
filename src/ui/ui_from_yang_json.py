@@ -97,6 +97,7 @@ class UIFromYANGJson:
     def getUIDataFromPath(self,ui_data,path):
         tokens = path.split("/")
         return_ui_data = None
+        print(tokens)
         for token in tokens:
             if token == "" :
                 return_ui_data = ui_data
@@ -106,8 +107,21 @@ class UIFromYANGJson:
                     return_ui_data = return_ui_data[token]
 
         return return_ui_data
-
-    def getHtmlFromPathObject(self, ui_data, data=None,indent=1):
+    
+    def isForm(self, op=None):
+        if (op is None):
+            return False
+        if (op=="add"):
+            return True
+        if (op=="edit"):
+            return True
+        if (op=="create"):
+            return True
+        if (op=="modify"):
+            return True
+        return False
+            
+    def getHtmlFromPathObject(self, ui_data,data=None,indent=1,op=None,parent_path="/"):
         indent_str =""
         html = "<html>\n"
         html = html+"<body>\n"
@@ -115,35 +129,48 @@ class UIFromYANGJson:
         for i in range(0, indent):
             indent_str += ' '
         if "state_tree" in ui_data:
-            draw_view = ui_data['state_tree']
-            html = html + indent_str+ "<h2>state view<h2>\n"
+            if (self.isForm(op)):
+                draw_view = ui_data['config_tree']
+                html = html + indent_str+ "<h2>Config view<h2>\n"
+            else :
+                draw_view = ui_data['state_tree']
+                html = html + indent_str+ "<h2>state view<h2>\n"    
             if "fields" in draw_view :
                 html = html + indent_str+ "<table>\n"
                 for field in draw_view['fields']:
-                    value = "-"
+                    value = ""
                     if ((data is not None) and  (field['key'] in data)) :
                         value =  str(data[field['key']])
-                    html = html + indent_str+"   "+"<tr><td>"+ field['key'] + "</td><td>"+value+"</td></tr>\n"
+                    if (self.isForm(op)):
+                        html = html + indent_str+"   "+"<tr><td>"+ field['key'] + "</td><td><input type=\"text\" id=\""+field['key']+"\" name=\""+field['key']+"\" value=\""+value+"\"></input></td></tr>\n"
+                    else:
+                        value = "-"    
+                        html = html + indent_str+"   "+"<tr><td>"+ field['key'] + "</td><td>"+value+"</td></tr>\n"
+                        
                 html = html + indent_str+ "</table>\n"
         if ("other_tree" in ui_data):
             other_tree = ui_data['other_tree']
             for key in other_tree:
                 other = other_tree[key]
+                print(parent_path)
+                path_seperator="/"
+                if (parent_path == "/"):
+                    path_seperator=""
                 if (other['type'] == "list"):
-                    html = html + indent_str+ "<a>"+key+" list<a>\n"
-                else:    
-                    html = html + indent_str+ "<a>"+key+"<a>\n"
+                    html = html + indent_str+ "<a href=\"/ui/yang/"+self.jsonfile+parent_path+path_seperator+key+"\">"+key+" list<a>\n"
+                else:   
+                    html = html + indent_str+ "<a href=\"/ui/yang/"+self.jsonfile+parent_path+path_seperator+key+"?op="+op+"\">"+key+"<a>\n" 
         html = html+"</body>\n"
         html = html+ "</html>\n"
         return html
 
-    def getHtml(self, ui_data, data=None, parent_path="/",indent=1):
+    def getHtml(self, ui_data, data=None, parent_path="/",indent=1,op=None):
         if parent_path == "/":
             _ui_data = ui_data
         else:    
             _ui_data = self.getUIDataFromPath(ui_data,parent_path)
         data = self.getTestData(parent_path)
-        html = self.getHtmlFromPathObject(_ui_data,data=data,indent=indent)
+        html = self.getHtmlFromPathObject(_ui_data,data=data,indent=indent,op=op,parent_path=parent_path)
         return html
 
     def getTestData(self,data_type="/"):
@@ -162,11 +189,11 @@ class UIFromYANGJson:
             return data
         return None
 
-    def getView(self, path="/"):
+    def getView(self, path="/",op=None):
         json_data = self.loadJson()
         ui_data = self.json2UI(json_data)
         data = {}
-        view = self.getHtml(ui_data,data,parent_path=path)
+        view = self.getHtml(ui_data,data,parent_path=path,op=op)
         return view
        # print(view)
         
