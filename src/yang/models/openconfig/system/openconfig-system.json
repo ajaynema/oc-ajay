@@ -1,0 +1,14 @@
+{
+  "type": "module",
+  "name": "openconfig-system",
+  "children": [
+    {
+      "type": "uses",
+      "name": "system-top",
+      "children": []
+    }
+  ],
+  "organization": "OpenConfig working group",
+  "contact": "OpenConfig working group\nnetopenconfig@googlegroups.com",
+  "description": "Model for managing system-wide services and functions on\nnetwork devices.\n\nPortions of this code were derived from IETF RFC 7317.\nPlease reproduce this note if possible.\n\nIETF code is subject to the following copyright and license:\nCopyright (c) IETF Trust and the persons identified as authors of\nthe code.\nAll rights reserved.\n\nRedistribution and use in source and binary forms, with or without\nmodification, is permitted pursuant to, and subject to the license\nterms contained in, the Simplified BSD License set forth in\nSection 4.c of the IETF Trust's Legal Provisions Relating\nto IETF Documents (http://trustee.ietf.org/license-info)."
+}
