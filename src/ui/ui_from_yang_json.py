@@ -64,10 +64,11 @@ class UIFromYANGJson:
                     parent_object['state_tree'] = ui_object
                  else:
                     other_ui_objects.append(ui_object)
-            
-            key_tree = array_object[2][0]
-            key_field = key_tree[1]
-            parent_object['key_field'] = key_field
+            if len(array_object) > 0:
+                if len(array_object[2]) > 0:
+                    key_tree = array_object[2][0]
+                    key_field = key_tree[1]
+                    parent_object['key_field'] = key_field
                 
 
         elif (type == "leaf"):
@@ -154,6 +155,8 @@ class UIFromYANGJson:
                 other = other_tree[key]
                 print(parent_path)
                 path_seperator="/"
+                if (op is None):
+                    op="list"
                 if (parent_path == "/"):
                     path_seperator=""
                 if (other['type'] == "list"):
