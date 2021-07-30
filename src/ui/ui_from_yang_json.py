@@ -136,7 +136,89 @@ class UIFromYANGJson:
     def getHtmlFromPathObject(self, ui_data,data=None,indent=1,op=None,parent_path="/"):
         indent_str =""
         html = "<html>\n"
+        html = html + '''
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+        <!-- Font Awesome -->
+            <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+            rel="stylesheet"
+            />
+            <!-- Google Fonts -->
+            <link
+            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+            rel="stylesheet"
+            />
+            <!-- MDB -->
+            <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.css"
+            rel="stylesheet"
+            />
+            <!-- MDB -->
+            <script
+            type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"
+            ></script>
+        
+        '''
         html = html+"<body>\n"
+        html = html+'''
+        <div>
+        <div>
+          <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-fixed-top" style="padding-left:0px;background-color:silver!important">
+            <div class="container-fluid no-padding-xs" style="width:100%;">
+              <div class="navbar-header">
+                	<button style="float:left; margin-left:10px" class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
+                <a class="navbar-brand" style="padding-top:2px;padding-left:35px">                  
+                 Open Config - UI
+                </a>
+              </div> 
+              <div id="navbar" class="collapse navbar-collapse justify-content-end">
+                <ul class="nav navbar-nav navbar-right text-right ms-auto mb-2 mb-lg-0">
+                  <li id="" class="nav-item" >
+                    <a style="padding-top:13px;color:black;text-decoration: none;margin-left:30px;" href="/ui/yang/network-instances">Network Instance</a>
+                  </li> 
+                  <li id="" class="nav-item" >
+                    <a style="padding-top:13px;color:black;text-decoration: none;margin-left:30px;" href="/ui/yang/platform">Platform</a>
+                  </li> 
+                  <li id="" class="nav-item" >
+                    <a style="color:black;text-decoration: none;margin-left: 30px;margin-right: 30px;" href="/ui/yang/system">System</a>
+                  </li> 
+                </ul> 
+              </div> 
+            </div> 
+          </nav> 
+        </div> 
+      </div>
+      '''
+        html = html+"<div class=\"container-fluid\">"
+        html = html+"<div class=\"row\">"
+        html = html+'''<div class="col-lg-3 col-md-3 col-md-left">'''
+        if ("other_tree" in ui_data):
+            html = html+'''
+            <div class="font-18 text-center no-margin text-gray-black padding-b-5"           style="background-color:#00BCD4;padding:6px;color:white;">'''
+            html = html+self.jsonfile
+            html = html+"</div>"
+            other_tree = ui_data['other_tree']
+            html = html+'''
+            <div class="box-body no-padding">'''
+            for key in other_tree:
+                other = other_tree[key]
+                print(parent_path)
+                path_seperator="/"
+                if (op is None):
+                    op="list"
+                if (parent_path == "/"):
+                    path_seperator=""
+                if (other['type'] == "list"):
+                    html = html + indent_str+ "<a class=\"list-group-item with_indentation with_icon \" href=\"/ui/yang/"+self.jsonfile+parent_path+path_seperator+key+"\">"+key+" list<a>\n"
+                else:   
+                    html = html + indent_str+ "<a class=\"list-group-item with_indentation with_icon \" href=\"/ui/yang/"+self.jsonfile+parent_path+path_seperator+key+"?op="+op+"\">"+key+"<a>\n" 
+            html = html+'</div>'
+        html = html+"</div>"
+        html = html+'''<div class="col-lg-9 col-md-9 col-sm-12 col-md-center-and-right">'''
         draw_view = None
         for i in range(0, indent):
             indent_str += ' '
@@ -148,32 +230,24 @@ class UIFromYANGJson:
                 draw_view = ui_data['state_tree']
                 html = html + indent_str+ "<h2>state view<h2>\n"    
             if "fields" in draw_view :
+                html = html + indent_str+ "<form>\n"
                 html = html + indent_str+ "<table>\n"
                 for field in draw_view['fields']:
                     value = ""
                     if ((data is not None) and  (field['key'] in data)) :
                         value =  str(data[field['key']])
                     if (self.isForm(op)):
-                        html = html + indent_str+"   "+"<tr><td>"+ field['key'] + "</td><td><input type=\"text\" id=\""+field['key']+"\" name=\""+field['key']+"\" value=\""+value+"\"></input></td></tr>\n"
+                        html = html + indent_str+"   "+"<tr><td>"+ field['key'] + "</td><td><input type=\"text\" id=\""+field['key']+"\" name=\""+field['key']+"\" value=\""+value+"\" class=\"form-control-sm\"></input></td></tr>\n"
                     else:
                         value = "-"    
                         html = html + indent_str+"   "+"<tr><td>"+ field['key'] + "</td><td>"+value+"</td></tr>\n"
                         
                 html = html + indent_str+ "</table>\n"
-        if ("other_tree" in ui_data):
-            other_tree = ui_data['other_tree']
-            for key in other_tree:
-                other = other_tree[key]
-                print(parent_path)
-                path_seperator="/"
-                if (op is None):
-                    op="list"
-                if (parent_path == "/"):
-                    path_seperator=""
-                if (other['type'] == "list"):
-                    html = html + indent_str+ "<a href=\"/ui/yang/"+self.jsonfile+parent_path+path_seperator+key+"\">"+key+" list<a>\n"
-                else:   
-                    html = html + indent_str+ "<a href=\"/ui/yang/"+self.jsonfile+parent_path+path_seperator+key+"?op="+op+"\">"+key+"<a>\n" 
+                html = html + indent_str+ "</form>\n"
+        
+        html = html+"</div>"
+        html = html+"</div>"
+        html = html+"</div>"
         html = html+"</body>\n"
         html = html+ "</html>\n"
         return html
