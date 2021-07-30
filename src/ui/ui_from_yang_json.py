@@ -194,7 +194,7 @@ class UIFromYANGJson:
       </div>
       '''
         html = html+"<div class=\"container-fluid\">"
-        html = html+"<div class=\"row\">"
+        html = html+"<div class=\"row\" style=\"margin-top:10px;\">"
         html = html+'''<div class="col-lg-3 col-md-3 col-md-left">'''
         if ("other_tree" in ui_data):
             html = html+'''
@@ -220,31 +220,55 @@ class UIFromYANGJson:
         html = html+"</div>"
         html = html+'''<div class="col-lg-9 col-md-9 col-sm-12 col-md-center-and-right">'''
         draw_view = None
+        html = html+'''<div style="margin:30px;width:90%;">'''
         for i in range(0, indent):
             indent_str += ' '
         if "state_tree" in ui_data:
             if (self.isForm(op)):
                 draw_view = ui_data['config_tree']
-                html = html + indent_str+ "<h2>Config view<h2>\n"
+                html = html +'''
+                <div>
+                  <h4 class="font-18 text-center no-margin text-gray-black padding-b-5"     style="background-color:#00BCD4;padding:6px;color:white;">
+                        Config view
+                  </h4> 
+                </div> 
+                <div class="clearfix">
+                </div> '''
             else :
                 draw_view = ui_data['state_tree']
-                html = html + indent_str+ "<h2>state view<h2>\n"    
+                html = html +'''
+                <div>
+                  <h4 class="font-18 text-center no-margin text-gray-black padding-b-5"     style="background-color:#00BCD4;padding:6px;color:white;">
+                        State view
+                  </h4> 
+                </div> 
+                <div class="clearfix">
+                </div> '''  
             if "fields" in draw_view :
-                html = html + indent_str+ "<form>\n"
-                html = html + indent_str+ "<table>\n"
+                html = html + indent_str+ "<form class=\"flat_form form-horizontal\">\n"
+                html = html + indent_str+ "<table class=\"form_table\" cellspacing=\"4\" cellpadding=\"4\" style=\"width:100%\">\n"
                 for field in draw_view['fields']:
                     value = ""
+                    readonly=""
                     if ((data is not None) and  (field['key'] in data)) :
                         value =  str(data[field['key']])
                     if (self.isForm(op)):
-                        html = html + indent_str+"   "+"<tr><td>"+ field['key'] + "</td><td><input type=\"text\" id=\""+field['key']+"\" name=\""+field['key']+"\" value=\""+value+"\" class=\"form-control-sm\"></input></td></tr>\n"
-                    else:
-                        value = "-"    
-                        html = html + indent_str+"   "+"<tr><td>"+ field['key'] + "</td><td>"+value+"</td></tr>\n"
-                        
+                        readonly="readonly"
+                    html = html + indent_str+"   "+"<tr><td class=\"col-sm-4\">"+ field['key'] + "</td><td class=\"col-sm-8\"><input type=\"text\" id=\""+field['key']+"\" name=\""+field['key']+"\" value=\""+value+"\" class=\"form-control\" "+readonly+"></input></td></tr>\n"
                 html = html + indent_str+ "</table>\n"
+
+                if (self.isForm(op)):
+                    html = html + '''<div class="form_footer " style="width:100%; padding: 5px; background-color: #DCDCDC;" align="right">
+                        <a href="/ui/meter_category" style="color:#C8C8C8;">                      <input id="cancel" type="button" style="width:100px;padding-top:5px;padding-bottom:5px;" value="Cancel" /> 
+    </a>
+                        <input id="save" class="form_buttonbtn btn-success" type="submit" style="margin-left:20px;width:100px;padding-top:5px;padding-bottom:5px;" value="Save" /> 
+                    </div>'''
+                else :
+                    html = html + '''<div class="form_footer " style="width:100%; padding: 5px; background-color: #DCDCDC;" align="right">
+                        <input id="save" class="form_buttonbtn btn-success" type="submit" style="margin-left:20px;width:100px;padding-top:5px;padding-bottom:5px;" value="Edit" /> 
+                    </div>'''    
                 html = html + indent_str+ "</form>\n"
-        
+        html = html+"</div>"
         html = html+"</div>"
         html = html+"</div>"
         html = html+"</div>"
