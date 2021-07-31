@@ -47,6 +47,7 @@ class UIFromYANGJson:
                 parent_object['other_tree'] = other_ui_objects
             if (len(fields) > 0):
                 parent_object['fields'] = fields
+            
         elif (type == "list"):
             other_ui_objects={}
             fields=[]
@@ -71,6 +72,7 @@ class UIFromYANGJson:
                         fields.append(ui_object)
                     else:
                         other_ui_objects[ui_object['key']] = ui_object
+                 
             if (len(other_ui_objects) > 0):
                 parent_object['other_tree'] = other_ui_objects        
             if (len(fields) > 0):
@@ -117,6 +119,7 @@ class UIFromYANGJson:
                 if 'other_tree' in return_ui_data:
                     return_ui_data = return_ui_data['other_tree']
                     return_ui_data = return_ui_data[token]
+
 
         return return_ui_data
     
@@ -207,6 +210,7 @@ class UIFromYANGJson:
             
         if ("other_tree" in ui_data):
             other_tree = ui_data['other_tree']
+            parent_key = ui_data['key']
             html = html+'''
             <div class="box-body no-padding">'''
             for key in other_tree:
@@ -218,7 +222,7 @@ class UIFromYANGJson:
                 if (parent_path == "/"):
                     path_seperator=""
                 if (other['type'] == "list"):
-                    html = html + indent_str+ "<a class=\"list-group-item with_indentation with_icon \" href=\"/ui/yang/"+self.jsonfile+parent_path+path_seperator+key+"\">"+key+" list<a>\n"
+                    html = html + indent_str+ "<a class=\"list-group-item with_indentation with_icon \" href=\"/ui/yang/"+self.jsonfile+parent_path+"\">"+parent_key+"<a>\n"
                 else:   
                     html = html + indent_str+ "<a class=\"list-group-item with_indentation with_icon \" href=\"/ui/yang/"+self.jsonfile+parent_path+path_seperator+key+"?op="+op+"\">"+key+"<a>\n" 
             html = html+'</div>'
@@ -229,6 +233,7 @@ class UIFromYANGJson:
             html = html+self.jsonfile
             html = html+"</div>"
             other_tree = parent_data['other_tree']
+            parent_key = parent_data['key']
             html = html+'''
             <div class="box-body no-padding">'''
             for key in other_tree:
@@ -239,7 +244,7 @@ class UIFromYANGJson:
                 if (parent_path == "/"):
                     path_seperator=""
                 if (other['type'] == "list"):
-                    html = html + indent_str+ "<a class=\"list-group-item with_indentation with_icon \" href=\"/ui/yang/"+self.jsonfile+path_seperator+key+"\">"+key+" list<a>\n"
+                    html = html + indent_str+ "<a class=\"list-group-item with_indentation with_icon \" href=\"/ui/yang/"+self.jsonfile+path_seperator+parent_key+"\">"+parent_key+" <a>\n"
                 else:   
                     html = html + indent_str+ "<a class=\"list-group-item with_indentation with_icon \" href=\"/ui/yang/"+self.jsonfile+path_seperator+key+"?op="+op+"\">"+key+"<a>\n" 
             html = html+'</div>'
@@ -287,15 +292,23 @@ class UIFromYANGJson:
 
                 if (self.isForm(op)):
                     html = html + '''<div class="form_footer " style="width:100%; padding: 5px; background-color: #DCDCDC;" align="right">
-                        <a href="/ui/meter_category" style="color:#C8C8C8;">                      <input id="cancel" type="button" style="width:100px;padding-top:5px;padding-bottom:5px;" value="Cancel" /> 
+                        <a href="/ui/meter_category" style="color:#C8C8C8;">                      <input id="cancel" type="button" style="width:100px;padding-top:5px;padding-bottom:5px;" class="btn btn-light" value="Cancel" /> 
     </a>
-                        <input id="save" class="form_buttonbtn btn-success" type="submit" style="margin-left:20px;width:100px;padding-top:5px;padding-bottom:5px;" value="Save" /> 
+                        <input id="save" class="btn btn-success" type="submit" style="margin-left:20px;width:100px;padding-top:5px;padding-bottom:5px;" value="Save" /> 
                     </div>'''
                 else :
                     html = html + '''<div class="form_footer " style="width:100%; padding: 5px; background-color: #DCDCDC;" align="right">
-                        <a href="javascript:void(0);" onclick="javascript:edit()"><input id="save" class="form_buttonbtn btn-success" type="submit" style="margin-left:20px;width:100px;padding-top:5px;padding-bottom:5px;" value="Edit" /> </a>
+                        <a href="javascript:void()" onclick="javascript:edit()"><input id="save" class="form_buttonbtn btn-success" type="submit" style="margin-left:20px;width:100px;padding-top:5px;padding-bottom:5px;" value="Edit" /> </a>
                     </div>'''    
                 html = html + indent_str+ "</form>\n"
+        else:
+             if ("other_tree" in ui_data):
+                other_tree = ui_data['other_tree']
+                for key in other_tree:
+                    html = html+"<h2>"+key+" list</h2>"
+                    html = html+ "<a href=\"/ui/yang/"+self.jsonfile+parent_path+path_seperator+key+"?op=add\">"
+                    html = html+'''<input id="add" class="btn btn-success" type="submit" style="width:100px;padding-top:7px;padding-bottom:7px;" value="Add New" /> '''
+                    html = html+ "</a>"
         html = html+"</div>"
         html = html+"</div>"
         html = html+"</div>"
