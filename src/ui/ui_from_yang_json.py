@@ -133,7 +133,7 @@ class UIFromYANGJson:
             return True
         return False
             
-    def getHtmlFromPathObject(self, ui_data,data=None,indent=1,op=None,parent_path="/"):
+    def getHtmlFromPathObject(self, parent_data, ui_data,data=None,indent=1,op=None,parent_path="/"):
         indent_str =""
         html = "<html>\n"
         html = html + '''
@@ -196,11 +196,16 @@ class UIFromYANGJson:
         html = html+"<div class=\"container-fluid\">"
         html = html+"<div class=\"row\" style=\"margin-top:10px;\">"
         html = html+'''<div class="col-lg-3 col-md-3 col-md-left">'''
-        if ("other_tree" in ui_data):
-            html = html+'''
+        html = html+'''
             <div class="font-18 text-center no-margin text-gray-black padding-b-5"           style="background-color:#00BCD4;padding:6px;color:white;">'''
-            html = html+self.jsonfile
-            html = html+"</div>"
+        if (parent_path == "/"):
+                html = html+"/"+self.jsonfile
+        else:
+                html = html+"/"+self.jsonfile+parent_path
+        
+        html = html+"</div>"
+            
+        if ("other_tree" in ui_data):
             other_tree = ui_data['other_tree']
             html = html+'''
             <div class="box-body no-padding">'''
@@ -217,7 +222,30 @@ class UIFromYANGJson:
                 else:   
                     html = html + indent_str+ "<a class=\"list-group-item with_indentation with_icon \" href=\"/ui/yang/"+self.jsonfile+parent_path+path_seperator+key+"?op="+op+"\">"+key+"<a>\n" 
             html = html+'</div>'
+        html = html+'<br>'   
+        if ("other_tree" in parent_data and parent_path != "/"):
+            html = html+'''
+            <div class="font-18 text-center no-margin text-gray-black padding-b-5"           style="background-color:#00BCD4;padding:6px;color:white;">'''
+            html = html+self.jsonfile
+            html = html+"</div>"
+            other_tree = parent_data['other_tree']
+            html = html+'''
+            <div class="box-body no-padding">'''
+            for key in other_tree:
+                other = other_tree[key]
+                path_seperator="/"
+                if (op is None):
+                    op="list"
+                if (parent_path == "/"):
+                    path_seperator=""
+                if (other['type'] == "list"):
+                    html = html + indent_str+ "<a class=\"list-group-item with_indentation with_icon \" href=\"/ui/yang/"+self.jsonfile+path_seperator+key+"\">"+key+" list<a>\n"
+                else:   
+                    html = html + indent_str+ "<a class=\"list-group-item with_indentation with_icon \" href=\"/ui/yang/"+self.jsonfile+path_seperator+key+"?op="+op+"\">"+key+"<a>\n" 
+            html = html+'</div>'
+            
         html = html+"</div>"
+
         html = html+'''<div class="col-lg-9 col-md-9 col-sm-12 col-md-center-and-right">'''
         draw_view = None
         html = html+'''<div style="margin:30px;width:90%;">'''
@@ -249,11 +277,11 @@ class UIFromYANGJson:
                 html = html + indent_str+ "<table class=\"form_table\" cellspacing=\"4\" cellpadding=\"4\" style=\"width:100%\">\n"
                 for field in draw_view['fields']:
                     value = ""
-                    readonly=""
+                    readonly="readonly"
                     if ((data is not None) and  (field['key'] in data)) :
                         value =  str(data[field['key']])
                     if (self.isForm(op)):
-                        readonly="readonly"
+                        readonly=""
                     html = html + indent_str+"   "+"<tr><td class=\"col-sm-4\">"+ field['key'] + "</td><td class=\"col-sm-8\"><input type=\"text\" id=\""+field['key']+"\" name=\""+field['key']+"\" value=\""+value+"\" class=\"form-control\" "+readonly+"></input></td></tr>\n"
                 html = html + indent_str+ "</table>\n"
 
@@ -265,7 +293,7 @@ class UIFromYANGJson:
                     </div>'''
                 else :
                     html = html + '''<div class="form_footer " style="width:100%; padding: 5px; background-color: #DCDCDC;" align="right">
-                        <input id="save" class="form_buttonbtn btn-success" type="submit" style="margin-left:20px;width:100px;padding-top:5px;padding-bottom:5px;" value="Edit" /> 
+                        <a href="javascript:void(0);" onclick="javascript:edit()"><input id="save" class="form_buttonbtn btn-success" type="submit" style="margin-left:20px;width:100px;padding-top:5px;padding-bottom:5px;" value="Edit" /> </a>
                     </div>'''    
                 html = html + indent_str+ "</form>\n"
         html = html+"</div>"
@@ -282,7 +310,7 @@ class UIFromYANGJson:
         else:    
             _ui_data = self.getUIDataFromPath(ui_data,parent_path)
         data = self.getTestData(parent_path)
-        html = self.getHtmlFromPathObject(_ui_data,data=data,indent=indent,op=op,parent_path=parent_path)
+        html = self.getHtmlFromPathObject(ui_data,_ui_data,data=data,indent=indent,op=op,parent_path=parent_path)
         return html
 
     def getTestData(self,data_type="/"):
