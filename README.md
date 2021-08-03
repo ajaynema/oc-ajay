@@ -74,6 +74,8 @@ pip install pymongo
 
 pip install requests
 
+pip install rasa
+
 ## Commands
 export PYBINDPLUGIN=`/usr/bin/env python -c 'import pyangbind; import os; print("%s/plugin" % os.path.dirname(pyangbind.__file__))'`
 
