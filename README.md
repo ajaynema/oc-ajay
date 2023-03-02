@@ -55,6 +55,31 @@ Same time trying to make useful **tools** and **framework for automation and mon
 
 => [TMF639 - Resource Inventory Management Implementation - Done](https://github.com/ajaynema/oc-nlp-ajay/blob/main/src/tmf/tmf639/Readme.md)
 
+=> [TMF620 - Product Catalog Management - ]
+
+=> [TMF621 - Trouble Ticket  - ]
+
+=> [TMF629 - Customer Management - ]
+
+=> [TMF632 - Party Management - ]
+
+=> [TMF633 - Service Catalog - ]
+
+=> [TMF635 - Usage Management - ]
+
+=> [TMF637 - Product Inventory Management - ]
+
+=> [TMF640 - Service activation Management - ]
+
+=> [TMF645 - Service qualification Management - ]
+
+=> [TMF646 - Appointment - ]
+
+=> [TMF648 - Quote Management - ]
+
+=> [TMF6451 - Agreement Management]
+
+=> [TMF640 - Service activation Management - ]
 
 ## Packages
 
